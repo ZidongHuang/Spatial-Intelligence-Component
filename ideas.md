@@ -8,6 +8,8 @@ path animation reference
 
 https://bl.ocks.org/basilesimon/f164aec5758d16d51d248e41af5428e4
 
+http://bl.ocks.org/nategood/2d5d7537597e340f968d
+
 lots of path
 https://observablehq.com/d/dfea7ba645fdab90
 
