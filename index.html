@@ -1,0 +1,3596 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<!-- Load D3.js v5 -->
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<!-- Load jQuery.js, great for selecting (and subsequently manipualting) objects on the page -->
+<script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+<!-- Load Underscore.js, a utility library for operating on arrays (filter, sort, min, max) -->
+<script src='https://rawgit.com/jashkenas/underscore/master/underscore-min.js'></script>
+<!-- Load Bootstrap's stylesheet (CSS). It defines the default style of, among other things, the dropdown menu -->
+<link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet'>
+<!-- Load Ion's rangeSlider.js, to create and style a range slider -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+<!-- Load the default stylesheet (CSS) for the slider -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
+
+<!-- data -->
+<script type='application-json' id='data'>
+[
+  {
+    "id": 375,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-1",
+    "male_number": 766,
+    "male_percent": 46,
+    "highlight": 0
+  },
+  {
+    "id": 397,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-2",
+    "male_number": 802,
+    "male_percent": 45,
+    "highlight": 0
+  },
+  {
+    "id": 419,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-3",
+    "male_number": 767,
+    "male_percent": 48,
+    "highlight": 0
+  },
+  {
+    "id": 441,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-4",
+    "male_number": 944,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 469,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-5",
+    "male_number": 1106,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 481,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-12",
+    "male_number": 1733,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 487,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-6",
+    "male_number": 2094,
+    "male_percent": 45,
+    "highlight": 0
+  },
+  {
+    "id": 506,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-7",
+    "male_number": 1292,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 522,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-8",
+    "male_number": 1391,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 614,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-19",
+    "male_number": 1187,
+    "male_percent": 42,
+    "highlight": 0
+  },
+  {
+    "id": 786,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-20",
+    "male_number": 1354,
+    "male_percent": 44,
+    "highlight": 0
+  },
+  {
+    "id": 821,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-11",
+    "male_number": 930,
+    "male_percent": 46,
+    "highlight": 0
+  },
+  {
+    "id": 823,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-18",
+    "male_number": 1150,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 835,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-9",
+    "male_number": 1688,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 849,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-10",
+    "male_number": 2113,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 886,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-28",
+    "male_number": 1626,
+    "male_percent": 41,
+    "highlight": 0
+  },
+  {
+    "id": 888,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-16",
+    "male_number": 1626,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 891,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-13",
+    "male_number": 1749,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 912,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-14",
+    "male_number": 1994,
+    "male_percent": 48,
+    "highlight": 0
+  },
+  {
+    "id": 1045,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-15",
+    "male_number": 1883,
+    "male_percent": 49,
+    "highlight": 0
+  },
+  {
+    "id": 1110,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-17",
+    "male_number": 1645,
+    "male_percent": 48,
+    "highlight": 0
+  },
+  {
+    "id": 1206,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-21",
+    "male_number": 1956,
+    "male_percent": 39,
+    "highlight": 0
+  },
+  {
+    "id": 1219,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-22",
+    "male_number": 981,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 1316,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-23",
+    "male_number": 942,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 1357,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-24",
+    "male_number": 911,
+    "male_percent": 46,
+    "highlight": 0
+  },
+  {
+    "id": 1436,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-25",
+    "male_number": 1025,
+    "male_percent": 44,
+    "highlight": 0
+  },
+  {
+    "id": 1486,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-27",
+    "male_number": 2129,
+    "male_percent": 42,
+    "highlight": 0
+  },
+  {
+    "id": 1488,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "Adidas Originals",
+    "date": "2021-2-26",
+    "male_number": 1205,
+    "male_percent": 46,
+    "highlight": 0
+  },
+  {
+    "id": 23,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-6",
+    "male_number": 553,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 130,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-13",
+    "male_number": 223,
+    "male_percent": 21,
+    "highlight": 0
+  },
+  {
+    "id": 179,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-12",
+    "male_number": 178,
+    "male_percent": 17,
+    "highlight": 0
+  },
+  {
+    "id": 207,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-11",
+    "male_number": 86,
+    "male_percent": 15,
+    "highlight": 0
+  },
+  {
+    "id": 281,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-17",
+    "male_number": 299,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 384,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-10",
+    "male_number": 504,
+    "male_percent": 18,
+    "highlight": 0
+  },
+  {
+    "id": 472,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-1",
+    "male_number": 88,
+    "male_percent": 22,
+    "highlight": 0
+  },
+  {
+    "id": 484,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-19",
+    "male_number": 137,
+    "male_percent": 24,
+    "highlight": 0
+  },
+  {
+    "id": 500,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-2",
+    "male_number": 213,
+    "male_percent": 18,
+    "highlight": 0
+  },
+  {
+    "id": 527,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-3",
+    "male_number": 140,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 545,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-4",
+    "male_number": 143,
+    "male_percent": 16,
+    "highlight": 0
+  },
+  {
+    "id": 562,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-5",
+    "male_number": 159,
+    "male_percent": 17,
+    "highlight": 0
+  },
+  {
+    "id": 660,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-7",
+    "male_number": 365,
+    "male_percent": 21,
+    "highlight": 0
+  },
+  {
+    "id": 676,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-9",
+    "male_number": 332,
+    "male_percent": 18,
+    "highlight": 0
+  },
+  {
+    "id": 721,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-16",
+    "male_number": 282,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 728,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-8",
+    "male_number": 261,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 757,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-18",
+    "male_number": 134,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 759,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-21",
+    "male_number": 329,
+    "male_percent": 23,
+    "highlight": 0
+  },
+  {
+    "id": 788,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-14",
+    "male_number": 220,
+    "male_percent": 25,
+    "highlight": 0
+  },
+  {
+    "id": 903,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-20",
+    "male_number": 206,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 988,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-28",
+    "male_number": 131,
+    "male_percent": 28,
+    "highlight": 0
+  },
+  {
+    "id": 1017,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-15",
+    "male_number": 275,
+    "male_percent": 25,
+    "highlight": 0
+  },
+  {
+    "id": 1226,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-22",
+    "male_number": 88,
+    "male_percent": 18,
+    "highlight": 0
+  },
+  {
+    "id": 1272,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-23",
+    "male_number": 78,
+    "male_percent": 18,
+    "highlight": 0
+  },
+  {
+    "id": 1346,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-24",
+    "male_number": 70,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 1387,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-25",
+    "male_number": 71,
+    "male_percent": 20,
+    "highlight": 0
+  },
+  {
+    "id": 1474,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-26",
+    "male_number": 112,
+    "male_percent": 17,
+    "highlight": 0
+  },
+  {
+    "id": 1509,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "BOYLONDON",
+    "date": "2021-2-27",
+    "male_number": 320,
+    "male_percent": 24,
+    "highlight": 0
+  },
+  {
+    "id": 30,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-11",
+    "male_number": 64,
+    "male_percent": 33,
+    "highlight": 0
+  },
+  {
+    "id": 55,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-10",
+    "male_number": 358,
+    "male_percent": 51,
+    "highlight": 0
+  },
+  {
+    "id": 195,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-9",
+    "male_number": 295,
+    "male_percent": 27,
+    "highlight": 0
+  },
+  {
+    "id": 446,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-17",
+    "male_number": 295,
+    "male_percent": 42,
+    "highlight": 0
+  },
+  {
+    "id": 567,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-1",
+    "male_number": 201,
+    "male_percent": 31,
+    "highlight": 0
+  },
+  {
+    "id": 585,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-2",
+    "male_number": 161,
+    "male_percent": 30,
+    "highlight": 0
+  },
+  {
+    "id": 603,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-3",
+    "male_number": 142,
+    "male_percent": 25,
+    "highlight": 0
+  },
+  {
+    "id": 619,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-4",
+    "male_number": 266,
+    "male_percent": 37,
+    "highlight": 0
+  },
+  {
+    "id": 638,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-5",
+    "male_number": 398,
+    "male_percent": 35,
+    "highlight": 0
+  },
+  {
+    "id": 642,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-16",
+    "male_number": 720,
+    "male_percent": 41,
+    "highlight": 0
+  },
+  {
+    "id": 653,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-6",
+    "male_number": 685,
+    "male_percent": 36,
+    "highlight": 0
+  },
+  {
+    "id": 659,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-7",
+    "male_number": 184,
+    "male_percent": 37,
+    "highlight": 0
+  },
+  {
+    "id": 672,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-8",
+    "male_number": 405,
+    "male_percent": 27,
+    "highlight": 0
+  },
+  {
+    "id": 695,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-19",
+    "male_number": 403,
+    "male_percent": 37,
+    "highlight": 0
+  },
+  {
+    "id": 720,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-12",
+    "male_number": 283,
+    "male_percent": 48,
+    "highlight": 0
+  },
+  {
+    "id": 748,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-13",
+    "male_number": 523,
+    "male_percent": 44,
+    "highlight": 0
+  },
+  {
+    "id": 901,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-18",
+    "male_number": 337,
+    "male_percent": 38,
+    "highlight": 0
+  },
+  {
+    "id": 1015,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-14",
+    "male_number": 865,
+    "male_percent": 45,
+    "highlight": 0
+  },
+  {
+    "id": 1027,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-15",
+    "male_number": 539,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 1164,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-21",
+    "male_number": 392,
+    "male_percent": 37,
+    "highlight": 0
+  },
+  {
+    "id": 1171,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-20",
+    "male_number": 495,
+    "male_percent": 37,
+    "highlight": 0
+  },
+  {
+    "id": 1233,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-28",
+    "male_number": 344,
+    "male_percent": 30,
+    "highlight": 0
+  },
+  {
+    "id": 1263,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-22",
+    "male_number": 216,
+    "male_percent": 41,
+    "highlight": 0
+  },
+  {
+    "id": 1299,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-23",
+    "male_number": 249,
+    "male_percent": 35,
+    "highlight": 0
+  },
+  {
+    "id": 1343,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-24",
+    "male_number": 241,
+    "male_percent": 33,
+    "highlight": 0
+  },
+  {
+    "id": 1422,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-25",
+    "male_number": 143,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 1495,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-26",
+    "male_number": 306,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 1510,
+    "b_type": "Restaurant",
+    "floor": "B1",
+    "name": "Duniang Hotpot",
+    "date": "2021-2-27",
+    "male_number": 714,
+    "male_percent": 44,
+    "highlight": 0
+  },
+  {
+    "id": 34,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-6",
+    "male_number": 99,
+    "male_percent": 49,
+    "highlight": 0
+  },
+  {
+    "id": 209,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-13",
+    "male_number": 90,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 232,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-12",
+    "male_number": 64,
+    "male_percent": 49,
+    "highlight": 0
+  },
+  {
+    "id": 262,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-11",
+    "male_number": 12,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 355,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-17",
+    "male_number": 77,
+    "male_percent": 51,
+    "highlight": 0
+  },
+  {
+    "id": 454,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-10",
+    "male_number": 107,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 543,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-19",
+    "male_number": 28,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 683,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-7",
+    "male_number": 54,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 731,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-9",
+    "male_number": 58,
+    "male_percent": 49,
+    "highlight": 0
+  },
+  {
+    "id": 746,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-8",
+    "male_number": 39,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 770,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-16",
+    "male_number": 62,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 805,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-1",
+    "male_number": 6,
+    "male_percent": 80,
+    "highlight": 0
+  },
+  {
+    "id": 808,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-18",
+    "male_number": 17,
+    "male_percent": 69,
+    "highlight": 0
+  },
+  {
+    "id": 820,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-2",
+    "male_number": 22,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 833,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-3",
+    "male_number": 15,
+    "male_percent": 44,
+    "highlight": 0
+  },
+  {
+    "id": 846,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-4",
+    "male_number": 18,
+    "male_percent": 65,
+    "highlight": 0
+  },
+  {
+    "id": 857,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-20",
+    "male_number": 30,
+    "male_percent": 67,
+    "highlight": 0
+  },
+  {
+    "id": 863,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-5",
+    "male_number": 17,
+    "male_percent": 41,
+    "highlight": 0
+  },
+  {
+    "id": 868,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-14",
+    "male_number": 99,
+    "male_percent": 52,
+    "highlight": 0
+  },
+  {
+    "id": 1033,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-15",
+    "male_number": 77,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 1093,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-28",
+    "male_number": 36,
+    "male_percent": 54,
+    "highlight": 0
+  },
+  {
+    "id": 1121,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-21",
+    "male_number": 69,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 1244,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-22",
+    "male_number": 18,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 1306,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-23",
+    "male_number": 14,
+    "male_percent": 46,
+    "highlight": 0
+  },
+  {
+    "id": 1360,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-24",
+    "male_number": 7,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 1417,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-25",
+    "male_number": 21,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 1480,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-26",
+    "male_number": 19,
+    "male_percent": 48,
+    "highlight": 0
+  },
+  {
+    "id": 1536,
+    "b_type": "Electronic",
+    "floor": "B1",
+    "name": "Dyson",
+    "date": "2021-2-27",
+    "male_number": 74,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 73,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-1",
+    "male_number": 295,
+    "male_percent": 55,
+    "highlight": 0
+  },
+  {
+    "id": 100,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-2",
+    "male_number": 283,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 129,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-3",
+    "male_number": 353,
+    "male_percent": 54,
+    "highlight": 0
+  },
+  {
+    "id": 172,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-4",
+    "male_number": 461,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 194,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-5",
+    "male_number": 481,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 222,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-6",
+    "male_number": 1059,
+    "male_percent": 56,
+    "highlight": 0
+  },
+  {
+    "id": 243,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-7",
+    "male_number": 591,
+    "male_percent": 55,
+    "highlight": 0
+  },
+  {
+    "id": 263,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-8",
+    "male_number": 691,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 378,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-12",
+    "male_number": 1012,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 502,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-28",
+    "male_number": 841,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 560,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-19",
+    "male_number": 473,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 774,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-20",
+    "male_number": 522,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 804,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-11",
+    "male_number": 446,
+    "male_percent": 52,
+    "highlight": 0
+  },
+  {
+    "id": 806,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-9",
+    "male_number": 807,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 807,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-18",
+    "male_number": 457,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 834,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-10",
+    "male_number": 1136,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 854,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-16",
+    "male_number": 881,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 866,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-13",
+    "male_number": 1101,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 884,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-14",
+    "male_number": 1344,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 1028,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-15",
+    "male_number": 1040,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 1106,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-17",
+    "male_number": 952,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 1199,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-21",
+    "male_number": 919,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 1201,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-22",
+    "male_number": 417,
+    "male_percent": 54,
+    "highlight": 0
+  },
+  {
+    "id": 1305,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-23",
+    "male_number": 470,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 1342,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-24",
+    "male_number": 399,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 1402,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-25",
+    "male_number": 473,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 1442,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-26",
+    "male_number": 615,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 1499,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "FILA FUSION",
+    "date": "2021-2-27",
+    "male_number": 1262,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 26,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-7",
+    "male_number": 246,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 80,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-16",
+    "male_number": 235,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 87,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-14",
+    "male_number": 261,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 158,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-6",
+    "male_number": 391,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 312,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-17",
+    "male_number": 311,
+    "male_percent": 45,
+    "highlight": 0
+  },
+  {
+    "id": 354,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-12",
+    "male_number": 335,
+    "male_percent": 46,
+    "highlight": 0
+  },
+  {
+    "id": 363,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-11",
+    "male_number": 189,
+    "male_percent": 41,
+    "highlight": 0
+  },
+  {
+    "id": 406,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-10",
+    "male_number": 411,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 550,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-1",
+    "male_number": 94,
+    "male_percent": 39,
+    "highlight": 0
+  },
+  {
+    "id": 573,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-2",
+    "male_number": 110,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 578,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-9",
+    "male_number": 294,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 601,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-3",
+    "male_number": 128,
+    "male_percent": 51,
+    "highlight": 0
+  },
+  {
+    "id": 620,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-4",
+    "male_number": 128,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 640,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-5",
+    "male_number": 155,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 758,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-18",
+    "male_number": 235,
+    "male_percent": 51,
+    "highlight": 0
+  },
+  {
+    "id": 816,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-8",
+    "male_number": 261,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 875,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-28",
+    "male_number": 208,
+    "male_percent": 64,
+    "highlight": 0
+  },
+  {
+    "id": 948,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-21",
+    "male_number": 360,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 958,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-13",
+    "male_number": 308,
+    "male_percent": 52,
+    "highlight": 0
+  },
+  {
+    "id": 983,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-19",
+    "male_number": 152,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 1016,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-15",
+    "male_number": 344,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 1112,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-20",
+    "male_number": 196,
+    "male_percent": 48,
+    "highlight": 0
+  },
+  {
+    "id": 1198,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-22",
+    "male_number": 111,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 1274,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-23",
+    "male_number": 137,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 1339,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-24",
+    "male_number": 114,
+    "male_percent": 56,
+    "highlight": 0
+  },
+  {
+    "id": 1405,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-25",
+    "male_number": 110,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 1456,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-26",
+    "male_number": 153,
+    "male_percent": 43,
+    "highlight": 0
+  },
+  {
+    "id": 1541,
+    "b_type": "Salon",
+    "floor": "B1",
+    "name": "HairCode",
+    "date": "2021-2-27",
+    "male_number": 297,
+    "male_percent": 54,
+    "highlight": 0
+  },
+  {
+    "id": 210,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-12",
+    "male_number": 338,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 212,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-1",
+    "male_number": 261,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 224,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-5",
+    "male_number": 297,
+    "male_percent": 70,
+    "highlight": 0
+  },
+  {
+    "id": 252,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-2",
+    "male_number": 277,
+    "male_percent": 64,
+    "highlight": 0
+  },
+  {
+    "id": 264,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-13",
+    "male_number": 305,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 283,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-9",
+    "male_number": 315,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 308,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-4",
+    "male_number": 320,
+    "male_percent": 65,
+    "highlight": 0
+  },
+  {
+    "id": 451,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-3",
+    "male_number": 269,
+    "male_percent": 66,
+    "highlight": 0
+  },
+  {
+    "id": 467,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-17",
+    "male_number": 466,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 576,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-8",
+    "male_number": 324,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 670,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-16",
+    "male_number": 499,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 677,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-10",
+    "male_number": 342,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 699,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-21",
+    "male_number": 601,
+    "male_percent": 55,
+    "highlight": 0
+  },
+  {
+    "id": 813,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-14",
+    "male_number": 527,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 843,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-18",
+    "male_number": 465,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 976,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-6",
+    "male_number": 475,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 979,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-11",
+    "male_number": 89,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 986,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-7",
+    "male_number": 284,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 1061,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-19",
+    "male_number": 352,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 1064,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-20",
+    "male_number": 517,
+    "male_percent": 64,
+    "highlight": 0
+  },
+  {
+    "id": 1119,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-15",
+    "male_number": 483,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 1175,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-28",
+    "male_number": 563,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 1248,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-22",
+    "male_number": 342,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 1309,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-23",
+    "male_number": 365,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 1358,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-24",
+    "male_number": 414,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 1448,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-25",
+    "male_number": 394,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 1483,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-26",
+    "male_number": 387,
+    "male_percent": 64,
+    "highlight": 0
+  },
+  {
+    "id": 1545,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "HIMO",
+    "date": "2021-2-27",
+    "male_number": 623,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 24,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-6",
+    "male_number": 1764,
+    "male_percent": 50,
+    "highlight": 0
+  },
+  {
+    "id": 139,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-13",
+    "male_number": 2092,
+    "male_percent": 56,
+    "highlight": 0
+  },
+  {
+    "id": 191,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-12",
+    "male_number": 2128,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 225,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-11",
+    "male_number": 614,
+    "male_percent": 47,
+    "highlight": 0
+  },
+  {
+    "id": 305,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-17",
+    "male_number": 2304,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 420,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-10",
+    "male_number": 1534,
+    "male_percent": 54,
+    "highlight": 0
+  },
+  {
+    "id": 505,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-19",
+    "male_number": 836,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 661,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-7",
+    "male_number": 1018,
+    "male_percent": 54,
+    "highlight": 0
+  },
+  {
+    "id": 694,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-9",
+    "male_number": 1286,
+    "male_percent": 56,
+    "highlight": 0
+  },
+  {
+    "id": 715,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-1",
+    "male_number": 524,
+    "male_percent": 53,
+    "highlight": 0
+  },
+  {
+    "id": 729,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-16",
+    "male_number": 1942,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 732,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-2",
+    "male_number": 712,
+    "male_percent": 54,
+    "highlight": 0
+  },
+  {
+    "id": 752,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-3",
+    "male_number": 604,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 777,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-4",
+    "male_number": 532,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 779,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-18",
+    "male_number": 872,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 792,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-5",
+    "male_number": 912,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 801,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-14",
+    "male_number": 2480,
+    "male_percent": 56,
+    "highlight": 0
+  },
+  {
+    "id": 809,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-8",
+    "male_number": 1088,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 914,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-20",
+    "male_number": 1338,
+    "male_percent": 52,
+    "highlight": 0
+  },
+  {
+    "id": 1025,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-15",
+    "male_number": 2358,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 1141,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-21",
+    "male_number": 1844,
+    "male_percent": 56,
+    "highlight": 0
+  },
+  {
+    "id": 1215,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-22",
+    "male_number": 800,
+    "male_percent": 56,
+    "highlight": 0
+  },
+  {
+    "id": 1254,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-28",
+    "male_number": 1112,
+    "male_percent": 52,
+    "highlight": 0
+  },
+  {
+    "id": 1289,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-23",
+    "male_number": 676,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 1365,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-24",
+    "male_number": 620,
+    "male_percent": 56,
+    "highlight": 0
+  },
+  {
+    "id": 1470,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-26",
+    "male_number": 890,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 1475,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-25",
+    "male_number": 624,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 1534,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "INMIX",
+    "date": "2021-2-27",
+    "male_number": 2650,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 297,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-27",
+    "male_number": 952,
+    "male_percent": 65,
+    "highlight": 0
+  },
+  {
+    "id": 400,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-9",
+    "male_number": 565,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 438,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-10",
+    "male_number": 670,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 785,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-11",
+    "male_number": 250,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 799,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-19",
+    "male_number": 373,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 800,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-12",
+    "male_number": 888,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 818,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-13",
+    "male_number": 1009,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 825,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-14",
+    "male_number": 1144,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 858,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-17",
+    "male_number": 1042,
+    "male_percent": 66,
+    "highlight": 0
+  },
+  {
+    "id": 864,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-18",
+    "male_number": 411,
+    "male_percent": 65,
+    "highlight": 0
+  },
+  {
+    "id": 867,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-1",
+    "male_number": 290,
+    "male_percent": 58,
+    "highlight": 0
+  },
+  {
+    "id": 880,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-2",
+    "male_number": 451,
+    "male_percent": 64,
+    "highlight": 0
+  },
+  {
+    "id": 893,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-3",
+    "male_number": 367,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 895,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-15",
+    "male_number": 1162,
+    "male_percent": 65,
+    "highlight": 0
+  },
+  {
+    "id": 905,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-16",
+    "male_number": 942,
+    "male_percent": 65,
+    "highlight": 0
+  },
+  {
+    "id": 910,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-4",
+    "male_number": 373,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 916,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-5",
+    "male_number": 470,
+    "male_percent": 59,
+    "highlight": 0
+  },
+  {
+    "id": 929,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-6",
+    "male_number": 917,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 943,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-7",
+    "male_number": 500,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 946,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-8",
+    "male_number": 668,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 1076,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-20",
+    "male_number": 589,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 1144,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-21",
+    "male_number": 890,
+    "male_percent": 60,
+    "highlight": 0
+  },
+  {
+    "id": 1255,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-28",
+    "male_number": 592,
+    "male_percent": 57,
+    "highlight": 0
+  },
+  {
+    "id": 1267,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-22",
+    "male_number": 391,
+    "male_percent": 61,
+    "highlight": 0
+  },
+  {
+    "id": 1298,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-23",
+    "male_number": 346,
+    "male_percent": 63,
+    "highlight": 0
+  },
+  {
+    "id": 1369,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-24",
+    "male_number": 345,
+    "male_percent": 62,
+    "highlight": 0
+  },
+  {
+    "id": 1386,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-25",
+    "male_number": 299,
+    "male_percent": 64,
+    "highlight": 0
+  },
+  {
+    "id": 1451,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "JINS",
+    "date": "2021-2-26",
+    "male_number": 359,
+    "male_percent": 66,
+    "highlight": 0
+  },
+  {
+    "id": 5,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-3",
+    "male_number": 286,
+    "male_percent": 31,
+    "highlight": 0
+  },
+  {
+    "id": 18,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-4",
+    "male_number": 432,
+    "male_percent": 30,
+    "highlight": 0
+  },
+  {
+    "id": 22,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-10",
+    "male_number": 689,
+    "male_percent": 29,
+    "highlight": 0
+  },
+  {
+    "id": 37,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-1",
+    "male_number": 256,
+    "male_percent": 27,
+    "highlight": 0
+  },
+  {
+    "id": 38,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-5",
+    "male_number": 407,
+    "male_percent": 30,
+    "highlight": 0
+  },
+  {
+    "id": 39,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-11",
+    "male_number": 489,
+    "male_percent": 32,
+    "highlight": 0
+  },
+  {
+    "id": 47,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-2",
+    "male_number": 274,
+    "male_percent": 30,
+    "highlight": 0
+  },
+  {
+    "id": 48,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-18",
+    "male_number": 1047,
+    "male_percent": 32,
+    "highlight": 0
+  },
+  {
+    "id": 65,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-6",
+    "male_number": 753,
+    "male_percent": 30,
+    "highlight": 0
+  },
+  {
+    "id": 67,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-12",
+    "male_number": 1126,
+    "male_percent": 36,
+    "highlight": 0
+  },
+  {
+    "id": 88,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-7",
+    "male_number": 578,
+    "male_percent": 34,
+    "highlight": 0
+  },
+  {
+    "id": 121,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-8",
+    "male_number": 606,
+    "male_percent": 32,
+    "highlight": 0
+  },
+  {
+    "id": 167,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-17",
+    "male_number": 1114,
+    "male_percent": 34,
+    "highlight": 0
+  },
+  {
+    "id": 254,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-16",
+    "male_number": 1120,
+    "male_percent": 34,
+    "highlight": 0
+  },
+  {
+    "id": 510,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-9",
+    "male_number": 659,
+    "male_percent": 32,
+    "highlight": 0
+  },
+  {
+    "id": 554,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-13",
+    "male_number": 1080,
+    "male_percent": 36,
+    "highlight": 0
+  },
+  {
+    "id": 606,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-14",
+    "male_number": 1327,
+    "male_percent": 35,
+    "highlight": 0
+  },
+  {
+    "id": 625,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-15",
+    "male_number": 1139,
+    "male_percent": 35,
+    "highlight": 0
+  },
+  {
+    "id": 755,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-21",
+    "male_number": 1242,
+    "male_percent": 32,
+    "highlight": 0
+  },
+  {
+    "id": 949,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-19",
+    "male_number": 741,
+    "male_percent": 33,
+    "highlight": 0
+  },
+  {
+    "id": 1085,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-20",
+    "male_number": 922,
+    "male_percent": 32,
+    "highlight": 0
+  },
+  {
+    "id": 1225,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-22",
+    "male_number": 511,
+    "male_percent": 33,
+    "highlight": 0
+  },
+  {
+    "id": 1303,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-23",
+    "male_number": 640,
+    "male_percent": 30,
+    "highlight": 0
+  },
+  {
+    "id": 1344,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-28",
+    "male_number": 1059,
+    "male_percent": 33,
+    "highlight": 0
+  },
+  {
+    "id": 1372,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-24",
+    "male_number": 602,
+    "male_percent": 34,
+    "highlight": 0
+  },
+  {
+    "id": 1409,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-25",
+    "male_number": 588,
+    "male_percent": 31,
+    "highlight": 0
+  },
+  {
+    "id": 1447,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-26",
+    "male_number": 655,
+    "male_percent": 35,
+    "highlight": 0
+  },
+  {
+    "id": 1519,
+    "b_type": "Clothes",
+    "floor": "B1",
+    "name": "KT World",
+    "date": "2021-2-27",
+    "male_number": 1308,
+    "male_percent": 35,
+    "highlight": 0
+  },
+  {
+    "id": 94,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-1",
+    "male_number": 969,
+    "male_percent": 77,
+    "highlight": 0
+  },
+  {
+    "id": 152,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-2",
+    "male_number": 823,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 171,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-13",
+    "male_number": 2031,
+    "male_percent": 74,
+    "highlight": 0
+  },
+  {
+    "id": 193,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-5",
+    "male_number": 1021,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 196,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-12",
+    "male_number": 2020,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 238,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-9",
+    "male_number": 1467,
+    "male_percent": 77,
+    "highlight": 0
+  },
+  {
+    "id": 275,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-4",
+    "male_number": 1028,
+    "male_percent": 79,
+    "highlight": 0
+  },
+  {
+    "id": 399,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-3",
+    "male_number": 854,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 405,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-17",
+    "male_number": 1860,
+    "male_percent": 76,
+    "highlight": 0
+  },
+  {
+    "id": 524,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-8",
+    "male_number": 1348,
+    "male_percent": 77,
+    "highlight": 0
+  },
+  {
+    "id": 643,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-10",
+    "male_number": 1605,
+    "male_percent": 76,
+    "highlight": 0
+  },
+  {
+    "id": 685,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-21",
+    "male_number": 1759,
+    "male_percent": 72,
+    "highlight": 0
+  },
+  {
+    "id": 790,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-14",
+    "male_number": 2365,
+    "male_percent": 73,
+    "highlight": 0
+  },
+  {
+    "id": 826,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-18",
+    "male_number": 1277,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 962,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-6",
+    "male_number": 1726,
+    "male_percent": 74,
+    "highlight": 0
+  },
+  {
+    "id": 963,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-11",
+    "male_number": 705,
+    "male_percent": 74,
+    "highlight": 0
+  },
+  {
+    "id": 970,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-7",
+    "male_number": 1332,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 1049,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-19",
+    "male_number": 1275,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 1050,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-20",
+    "male_number": 1391,
+    "male_percent": 76,
+    "highlight": 0
+  },
+  {
+    "id": 1124,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-15",
+    "male_number": 2176,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 1127,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-16",
+    "male_number": 1834,
+    "male_percent": 73,
+    "highlight": 0
+  },
+  {
+    "id": 1163,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-28",
+    "male_number": 1556,
+    "male_percent": 74,
+    "highlight": 0
+  },
+  {
+    "id": 1239,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-22",
+    "male_number": 1125,
+    "male_percent": 77,
+    "highlight": 0
+  },
+  {
+    "id": 1294,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-23",
+    "male_number": 1066,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 1352,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-24",
+    "male_number": 1012,
+    "male_percent": 79,
+    "highlight": 0
+  },
+  {
+    "id": 1383,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-25",
+    "male_number": 1082,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 1482,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-26",
+    "male_number": 1232,
+    "male_percent": 79,
+    "highlight": 0
+  },
+  {
+    "id": 1544,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "Miniso",
+    "date": "2021-2-27",
+    "male_number": 1928,
+    "male_percent": 76,
+    "highlight": 0
+  },
+  {
+    "id": 40,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-7",
+    "male_number": 3266,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 112,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-14",
+    "male_number": 7878,
+    "male_percent": 68,
+    "highlight": 0
+  },
+  {
+    "id": 127,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-16",
+    "male_number": 5578,
+    "male_percent": 73,
+    "highlight": 0
+  },
+  {
+    "id": 192,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-6",
+    "male_number": 5346,
+    "male_percent": 73,
+    "highlight": 0
+  },
+  {
+    "id": 340,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-17",
+    "male_number": 5832,
+    "male_percent": 73,
+    "highlight": 0
+  },
+  {
+    "id": 402,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-11",
+    "male_number": 1962,
+    "male_percent": 71,
+    "highlight": 0
+  },
+  {
+    "id": 403,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-12",
+    "male_number": 5344,
+    "male_percent": 71,
+    "highlight": 0
+  },
+  {
+    "id": 456,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-10",
+    "male_number": 5318,
+    "male_percent": 72,
+    "highlight": 0
+  },
+  {
+    "id": 595,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-9",
+    "male_number": 4502,
+    "male_percent": 76,
+    "highlight": 0
+  },
+  {
+    "id": 822,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-8",
+    "male_number": 4138,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 839,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-18",
+    "male_number": 3864,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 869,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-20",
+    "male_number": 3940,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 950,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-1",
+    "male_number": 1928,
+    "male_percent": 74,
+    "highlight": 0
+  },
+  {
+    "id": 965,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-2",
+    "male_number": 2364,
+    "male_percent": 74,
+    "highlight": 0
+  },
+  {
+    "id": 973,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-13",
+    "male_number": 6044,
+    "male_percent": 70,
+    "highlight": 0
+  },
+  {
+    "id": 981,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-3",
+    "male_number": 2334,
+    "male_percent": 76,
+    "highlight": 0
+  },
+  {
+    "id": 993,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-19",
+    "male_number": 3594,
+    "male_percent": 74,
+    "highlight": 0
+  },
+  {
+    "id": 995,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-4",
+    "male_number": 2662,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 1014,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-5",
+    "male_number": 2984,
+    "male_percent": 78,
+    "highlight": 0
+  },
+  {
+    "id": 1024,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-15",
+    "male_number": 6836,
+    "male_percent": 72,
+    "highlight": 0
+  },
+  {
+    "id": 1129,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-21",
+    "male_number": 5068,
+    "male_percent": 70,
+    "highlight": 0
+  },
+  {
+    "id": 1227,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-28",
+    "male_number": 4376,
+    "male_percent": 70,
+    "highlight": 0
+  },
+  {
+    "id": 1273,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-22",
+    "male_number": 2796,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 1291,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-23",
+    "male_number": 2614,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 1362,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-24",
+    "male_number": 2638,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 1429,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-25",
+    "male_number": 2768,
+    "male_percent": 75,
+    "highlight": 0
+  },
+  {
+    "id": 1464,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-26",
+    "male_number": 3262,
+    "male_percent": 73,
+    "highlight": 0
+  },
+  {
+    "id": 1546,
+    "b_type": "Makeup",
+    "floor": "B1",
+    "name": "PERFECT DIARY",
+    "date": "2021-2-27",
+    "male_number": 5922,
+    "male_percent": 72,
+    "highlight": 0
+  }
+]
+</script>
+<!-- CSS style section -->
+<style>
+  /* This is an example of a CSS comment (only used within the style section) */
+
+  /* Import the Baloo Thambi font from Google Fonts  */
+  @import url('https://fonts.googleapis.com/css?family=Baloo+Thambi');
+
+   .form-group {
+     display: inline-block;
+     margin-right: 10px;
+   }
+
+   .form-control {
+     display: inline-block;
+     margin-left: 10px;
+     margin-right: 10px;
+     width: 375;
+   }
+
+   * {
+     margin:0;
+     padding:0;
+     font-family: Baloo Thambi;
+   }
+
+   h1 {
+     font-size:16px sans-serif;
+     margin-left: 10px;
+     line-height:0.2em;
+     font-weight: bold;
+     font-family: Baloo Thambi;
+   }
+
+   h2 {
+     font: 15px sans-serif;
+     margin-left: 10px;
+     line-height:0.2em;
+     font-weight: bold;
+     font-family: Baloo Thambi;
+   }
+
+   p {
+     fill: #8FA2AC;
+     font-family: Baloo Thambi;
+     font-size: 12px;
+   }
+
+   .axis text {
+     fill: #8FA2AC;
+     font: 12px sans-serif;
+     font-family: Baloo Thambi;
+   }
+
+   .axis_title {
+     fill: #8FA2AC;
+     text-anchor: middle;
+     font-family: Baloo Thambi;
+   }
+
+   .axis path,
+   .axis line {
+     fill: none;
+     stroke: none;
+     shape-rendering: crispEdges;
+   }
+
+   .chart {
+     font-family: Baloo Thambi;
+   }
+
+   .date_marker {
+     stroke-width: 1px;
+   }
+
+   .date_label_top {
+     fill: #8FA2AC;
+     text-anchor: middle;
+     font-family: Baloo Thambi;
+   }
+
+   .date_label_bottom {
+     fill: #8FA2AC;
+     text-anchor: middle;
+     font-family: Baloo Thambi;
+   }
+
+   .circle_legend {
+     fill: none;
+   }
+
+   .circle_text {
+     fill: #8FA2AC;
+     font-family: Baloo Thambi;
+   }
+
+   .tooltip {
+     border-radius: 10px;
+     padding: 10px;
+     position: absolute;
+     color: #FFF;
+     background-color: #222;
+     opacity: .9;
+     z-index: 1;
+     font-family: Baloo Thambi;
+   }
+
+   .irs--round .irs-line {
+      top: 36px;
+      height: 4px;
+      background-color: #E3E9ED;
+      border-radius: 4px;
+   }
+   .irs--round .irs-bar {
+      top: 36px;
+      height: 4px;
+      background-color: #005b96;
+   }
+   .irs--round .irs-handle {
+      top: 26px;
+      width: 24px;
+      height: 24px;
+      border: 4px solid #005b96;
+      background-color: white;
+      border-radius: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 255, 0.3);
+   }
+   .irs--round .irs-handle.state_hover,
+   .irs--round .irs-handle:hover {
+     background-color: #b3cde0;
+   }
+   .irs--square .irs-min,
+   .irs--square .irs-max {
+     color: #333;
+     font-family: Baloo Thambi;
+     font-size: 14px;
+     line-height: 1;
+     top: 0;
+     padding: 3px 5px;
+     background-color: rgba(0, 0, 0, 0.1);
+   }
+   .irs--round .irs-from,
+   .irs--round .irs-to,
+   .irs--round .irs-single {
+      font-family: Baloo Thambi;
+      font-size: 14px;
+      line-height: 1;
+      text-shadow: none;
+      padding: 3px 5px;
+      background-color: #005b96;
+      color: white;
+      border-radius: 4px;
+   }
+
+   text {
+     font-family: Baloo Thambi;
+   }
+
+   label {
+     font-family: Baloo Thambi;
+     margin-left: 10px;
+   }
+
+   select {
+     font-family: Baloo Thambi;
+   }
+
+   .show_label {
+     font-family: Baloo Thambi;
+   }
+
+   .legend_label {
+     fill: #8FA2AC;
+     text-anchor: middle;
+     font-family: Baloo Thambi;
+   }
+
+</style>
+</head>
+
+<body>
+  <!-- Titles -->
+  <div id='title' style='width:1366px;'>
+    <h1>Spatial Intelligence</h1>
+    <h2>Who is visiting the mall?</h2>
+    <br></br>
+  </div>
+
+  <!-- A div contaimer for the customer type selector dropdown menu -->
+  <div id='toolbar'></div>
+
+  <!-- A div container for the range slider, allowing users to control the time period displayed-->
+  <label>Time Range</label>
+  <div id='slider-container' style='width:1366px; height:50px;'>
+    <!-- A place holder input. This will be overwritten by the range slider when we create it, but it needs an id to hang the slider onto -->
+    <input type='text' id='slider' name='slider' value=''></input>
+  </div>
+
+  <!-- A div container for the main visualization -->
+  <div id='vis' style='width:1366px;'>
+    <svg class='chart-outer'><g class='chart'></g></svg>
+  </div>
+
+  <script type="text/javascript" src="viz.js"></script>
+</body>
+
+</html>
+
+<!-- <div class='form-group'>
+  <label for='franchise-var'>Label of Customer:</label>
+  <select class='form-control' id='franchise-var'>
+    <option value = "All" selected>All</option>
+  </select>
+</div> -->
