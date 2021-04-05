@@ -12,6 +12,14 @@ draw = function(data, vis_width, vis_height, params) {
     var width = vis_width - margin.left - margin.right, // inner width
         height = vis_height - margin.top - margin.bottom; // inner height
 
+    //remove the older canvas
+    d3.select('.chart-outer').remove()
+    d3.select('#vis')
+      .append('svg')
+      .attr('class','chart-outer')
+      .append('g')
+      .attr('class','chart')
+    
     // Set the dimensions of the outer chart
     d3.select('.chart-outer')
       .attr('width', vis_width)
@@ -114,7 +122,6 @@ draw = function(data, vis_width, vis_height, params) {
         var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
             data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
         if(i == 1){
-                console.log(data_filt)
                 svg.append('path')
                     .datum(data_filt)
                     //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
@@ -133,9 +140,8 @@ draw = function(data, vis_width, vis_height, params) {
     for (i = 0; i < storeName.length; i++) {
         var storeName_filt = storeName[i];
         var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
-        //if (i==1){console.log(data_filt)}
         svg.selectAll('.circle_' + i)
-          .data(data)
+          .data(data_filt)
         .enter().append('circle')
           .attr('class', function(d) {return d['store_name']})
           .attr('cx', function(d) { return xScale(new Date(d['date']));})
@@ -212,14 +218,14 @@ var createToolbar = function(data, params) {
     //console.log(i_dim);
 
     // create the <select></select> dropdown menu
-    $('#toolbar').append("<div class='form-group'><label for='"+dim+"-var'>"+label+":</label><select class='form-control' id='"+dim+"-var'></select></div>")
+    $('#toolbar').append("<div class='form-group'><label for='"+dim+"-var'>"+label+":</label><select class='form-control' id='"+dim+"-var' value='youth_rate'></select></div>")
     // populate the dropdown with the movie franchise options (<option></option>)
     for(i_franchise in franchises) {
       franchise_name = franchises[i_franchise];
       $('#'+dim+'-var').append("<option value='"+franchise_name+"'>"+franchise_name+"</option>");
     }
     // set picker to saved param values
-    $('#'+dim+'-var').val(params[dim+'axis']);
+    $('#'+dim+'-var').val(params['rate']);
 
     // handle change to select, wrap in anonymous function so the pickers don't clash
     $('#'+dim+'-var').change(function(dim) {
@@ -247,7 +253,6 @@ var createToolbar = function(data, params) {
         
         var this_index = franchises.indexOf(newVar)
 
-      
         draw(data,vis_width,vis_height,params);
       }
     }(dim));
