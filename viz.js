@@ -36,13 +36,13 @@ draw = function(data, vis_width, vis_height, params) {
         // This controls the minimum and maximum size of the bubbles
         .range([10,1000])
         // The '_.' indicates an Underscore function. Here we use it to extract a column from the JSON table and calulate the min and max
-        .domain([_.min(data.map(function(d) { return d['male_number'];})),
-                 _.max(data.map(function(d) { return d['male_number'];}))]);
+        .domain([_.min(data.map(function(d) { return d[params['num']];})),
+                 _.max(data.map(function(d) { return d[params['num']];}))]);
 
     // A line generator function. We'll use this later to draw the curves connected movies belonging to the same franchise
     var line = d3.line()
                  .x(function(d) { return xScale(new Date(d['date'])); })
-                 .y(function(d) { return yScale(d['male_percent']); })
+                 .y(function(d) { return yScale(d[params['rate']]); })
                  .curve(d3.curveMonotoneX) // smooth
 
     // Add a Y-axis to the chart, put it on the right side of the plot
@@ -105,7 +105,7 @@ draw = function(data, vis_width, vis_height, params) {
         .text(function(d) {return d['date'].slice(5,10)})
 
     // Add the curves to the chart (one for each specific store). Draw curves first to be underneath bubbles
-    var storeName = d3.set(data.map(function(d) { return d['name'];})).values();
+    var storeName = d3.set(data.map(function(d) { return d['store_name'];})).values();
     var i;
 
     for (i = 0; i < storeName.length; i++) {
@@ -143,8 +143,8 @@ draw = function(data, vis_width, vis_height, params) {
         .enter().append('circle')
           .attr('class', function(d) {return d['highlight'] == 1 ? 'dot circle_' + i + ' circle_highlight' : 'dot circle_' + i;})
           .attr('cx', function(d) { return xScale(new Date(d['date']));})
-          .attr('cy', function(d) { return yScale(parseFloat(d['male_percent']));})
-          .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d['male_number'])))/Math.PI);})
+          .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
+          .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
           .style('stroke-width', 0)
           .style('stroke', 'black')
           .style('fill', function(d) {
@@ -195,8 +195,8 @@ draw = function(data, vis_width, vis_height, params) {
 
                 var label = d['name'] + '<br/>' +
                             'floor: ' + d['floor'] + '<br/>' +
-                            'percentage: ' + d['male_percent'] + '%' + '<br/>' +
-                            'male_number: ' + Math.round(d['male_number']);
+                            'percentage: ' + d[params['rate']] + '%' + '<br/>' +
+                            'male_number: ' + Math.round(d[params['num']]);
                 return showDetails(label,this)
             }
 
@@ -204,8 +204,8 @@ draw = function(data, vis_width, vis_height, params) {
             if (d['name'] === params['store_display']) {
                 var label = d['name'] + '<br/>' +
                             'floor: ' + d['floor'] + '<br/>' +
-                            'percentage: ' + d['male_percent'] + '%' + '<br/>' +
-                            'male_number: ' + Math.round(d['male_number']);
+                            'percentage: ' + d[params['rate']] + '%' + '<br/>' +
+                            'male_number: ' + Math.round(d[params['num']]);
                 return showDetails(label,this);
             }
           })
@@ -399,7 +399,7 @@ var createSlider = function(data, params) {
 // Create a dropdown menu allowing users to select a specific franchise or return to the default view ('All')
 var createToolbar = function(data, params) {
     // an array of the franchise names in the input data
-    var franchises = d3.set(data.map(function(d) { return d['floor'];})).values();
+    var franchises = d3.set(data.map(function(d) { return d['dropdown'];})).values();
     // create pickers for both the franchise title
     var dimensions = ['franchise'];
     var toolbar_labels = ['Label of Customer']; // This will be displayed to the left of the dropdown menu
@@ -412,7 +412,7 @@ var createToolbar = function(data, params) {
       //console.log(i_dim);
 
       // create the <select></select> dropdown menu
-      $('#toolbar').append("<div class='form-group'><label for='"+dim+"-var'>"+label+":</label><select class='form-control' id='"+dim+"-var'><option value = All selected>All</option></select></div>")
+      $('#toolbar').append("<div class='form-group'><label for='"+dim+"-var'>"+label+":</label><select class='form-control' id='"+dim+"-var'></select></div>")
       // populate the dropdown with the movie franchise options (<option></option>)
       for(i_franchise in franchises) {
         franchise_name = franchises[i_franchise];
@@ -420,53 +420,44 @@ var createToolbar = function(data, params) {
       }
       // set picker to saved param values
       $('#'+dim+'-var').val(params[dim+'axis']);
+
       // handle change to select, wrap in anonymous function so the pickers don't clash
       $('#'+dim+'-var').change(function(dim) {
         return function() {
           var newVar = $('#'+dim+'-var').val();
           params[dim+'axis'] = newVar;
           params[dim+'axislabel'] = newVar;
+          params['num'] = $("#franchise-var").val().replace("rate", "number");
+          params['rate'] = $("#franchise-var").val();
+          // console.log(params['num'],params['rate'])
 
           // The order of operation matters here. If 'All' franchises are selected,
           // we want to return to the default view.
           // If a specific franchise is selected, we want to highlight only that franchise.
-          if (newVar === 'All') {
-            d3.selectAll('.dot')
-              .style('fill', '#b3cde0')
-            d3.selectAll('.curve')
-              .style('opacity', 0)
+          d3.selectAll('.show_label')
+            .style('opacity', function() {return newVar === 'All' ? 1 : 0;})
+            .moveToFront(); //bring to front
+          d3.selectAll('.line_highlight')
+              .style('opacity', function() {return newVar === 'All' ? 0.7 : 0;})
+          d3.selectAll('.circle_highlight')
+              .style('fill', function() {return newVar === 'All' ? '#005b96' : '#b3cde0';})
+              
+          d3.selectAll('.dot')
+            .style('fill', '#b3cde0')
+          d3.selectAll('.curve')
+            .style('opacity', 0)
+          
+          var this_index = franchises.indexOf(newVar)
 
-            d3.selectAll('.show_label')
-              .style('opacity', function() {return newVar === 'All' ? 1 : 0;})
-            d3.selectAll('.line_highlight')
-                .style('opacity', function() {return newVar === 'All' ? 0.7 : 0;})
-            d3.selectAll('.circle_highlight')
-                .style('fill', function() {return newVar === 'All' ? '#005b96' : '#b3cde0';})
-          } else {
-            d3.selectAll('.show_label')
-              .style('opacity', function() {return newVar === 'All' ? 1 : 0;})
+          d3.selectAll('.circle_' + this_index)
+              .style('fill', '#005b96')
+              .style('opacity', 1)
               .moveToFront(); //bring to front
-            d3.selectAll('.line_highlight')
-                .style('opacity', function() {return newVar === 'All' ? 0.7 : 0;})
-            d3.selectAll('.circle_highlight')
-                .style('fill', function() {return newVar === 'All' ? '#005b96' : '#b3cde0';})
-
-            d3.selectAll('.dot')
-              .style('fill', '#b3cde0')
-            d3.selectAll('.curve')
-              .style('opacity', 0)
-
-            var this_index = franchises.indexOf(newVar)
-
-            d3.selectAll('.circle_' + this_index)
-                .style('fill', '#005b96')
-                .style('opacity', 1)
-                .moveToFront(); //bring to front
-            d3.selectAll('.line_' + this_index)
-                .style('opacity', 1)
-                .moveToFront(); //bring to front
-          }
-
+          d3.selectAll('.line_' + this_index)
+              .style('opacity', 1)
+              .moveToFront(); //bring to front
+        
+          draw(data,vis_width,vis_height,params);
         }
       }(dim));
     }
