@@ -1,7 +1,8 @@
 var data = JSON.parse(document.getElementById('data').innerHTML);
 var vis_width = 1366; // outer width
 var vis_height = 650; // outer height
-var params = {num:'youth_number', rate:'youth_rate',store_display: 'male', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
+var params = {store_display: 'male', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
+var default_tag = "youth_rate";
 var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 7};
 var floor_color = {B1: 1, B2: 2, L1: 3, L2: 4, L3: 5, L4: 6, L5: 7, L6: 8}
 
@@ -12,14 +13,6 @@ draw = function(data, vis_width, vis_height, params) {
     var width = vis_width - margin.left - margin.right, // inner width
         height = vis_height - margin.top - margin.bottom; // inner height
 
-    //remove the older canvas
-    d3.select('.chart-outer').remove()
-    d3.select('#vis')
-      .append('svg')
-      .attr('class','chart-outer')
-      .append('g')
-      .attr('class','chart')
-    
     // Set the dimensions of the outer chart
     d3.select('.chart-outer')
       .attr('width', vis_width)
@@ -46,13 +39,13 @@ draw = function(data, vis_width, vis_height, params) {
         // This controls the minimum and maximum size of the bubbles
         .range([10,100])
         // The '_.' indicates an Underscore function. Here we use it to extract a column from the JSON table and calulate the min and max
-        .domain([_.min(data.map(function(d) { return d[params['num']];})),
-                 _.max(data.map(function(d) { return d[params['num']];}))]);
+        .domain([_.min(data.map(function(d) { return d[default_tag];})),
+                 _.max(data.map(function(d) { return d[default_tag];}))]);
 
     // A line generator function. We'll use this later to draw the curves connected movies belonging to the same franchise
     var line = d3.line()
                  .x(function(d) { return xScale(new Date(d['date'])); })
-                 .y(function(d) { return yScale(d[params['rate']]); })
+                 .y(function(d) { return yScale(d[default_tag]); })
                  .curve(d3.curveMonotoneX) // smooth
 
     // Add a Y-axis to the chart, put it on the right side of the plot
@@ -116,50 +109,75 @@ draw = function(data, vis_width, vis_height, params) {
 
     // Add the curves to the chart (one for each specific store). Draw curves first to be underneath bubbles
     var storeName = d3.set(data.map(function(d) { return d['store_name'];})).values();
-
     for (var i = 0; i < storeName.length; i++) {
         var storeName_filt = storeName[i];
         var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
             data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
-        if(i == 1){
-                svg.append('path')
-                    .datum(data_filt)
-                    //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
-                    .attr('class', function(d) {return "curve_" + d[0]['store_name']})
-                    .attr('d', line) // call the line generator function defined earlier
-                    .style('fill', 'none')
-                    .style('stroke', d => d3.schemeTableau10[type_color[d[0].type]])
-                    .style('stroke-width', 2)
-                    .style('stroke-opacity', 0.2)
-        }
+
+        svg.append('path')
+            .datum(data_filt)
+            //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
+            .attr('class', "curve_" + storeName_filt)
+            .attr('d', line) // call the line generator function defined earlier
+            .style('fill', 'none')
+            .style('stroke', d => d3.schemeTableau10[type_color[d[0].type]])
+            .style('stroke-width', 2)
+            .style('stroke-opacity', 0)
+            // .on("mouseover", function(d,i){
+            //   console.log("curve_" + d[0]['store_name']);
+            //   d3.select(this).style("stroke-opacity", 1);
+            // })
+            // .on("mouseout", function(d,i){
+            //   d3.select(this).style("stroke-opacity", 0);
+            // })
 
 
     };
 
     // Then add the bubbles to the chart (one for each store in each eay)
+    var clicked = []
     for (i = 0; i < storeName.length; i++) {
         var storeName_filt = storeName[i];
         var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
+        clicked.push(false);
+        console.log(clicked)
         svg.selectAll('.circle_' + i)
           .data(data_filt)
-        .enter().append('circle')
-          .attr('class', function(d) {return d['store_name']})
+          .enter()
+          .append('circle')
+          .attr('class', d => d['store_name'])
           .attr('cx', function(d) { return xScale(new Date(d['date']));})
-          .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
-          .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
+          .attr('cy', function(d) { return yScale(parseFloat(d[default_tag]));})
+          .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[default_tag])))/Math.PI);})
           .style('stroke-width', 0)
           .style('fill', d => d3.schemeTableau10[type_color[d.type]])
-          .style('fill-opacity', 0.2)
-          // .on('mouseover', function(event){
-          //      console.log(event);
+          .style('fill-opacity', 0.5)
+          .on('mouseover', function(d,i){
+               console.log("bubble_" + d['store_name'])
+               d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
+               d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
+          })
+          .on('mouseout', function(d,i){
+            if(clicked[i] == false){
+              d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
+              d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
+            }
+          })
+          // .on('click', function(d,i){
+          //   if(clicked[i] == false){
+          //     d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
+          //     d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
+          //     clicked[i] = true;
+          //   } else{
+          //     d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
+          //     d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
+          //     clicked[i] = false;
+          //   }
           // })
-          // .on('mouseout', function(d,i){
-          //     d3.select(this)
-          //       .attr({opacity: 0.2})
-          // })
+
+
         }
 }
-
 
 
 
@@ -204,59 +222,78 @@ var createSlider = function(data, params) {
 
 // Create a dropdown menu allowing users to select a specific franchise or return to the default view ('All')
 var createToolbar = function(data, params) {
-  // an array of the franchise names in the input data
-  var franchises = d3.set(data.map(function(d) { return d['dropdown'];})).values();
-  // create pickers for both the franchise title
-  var dimensions = ['franchise'];
-  var toolbar_labels = ['Label of Customer']; // This will be displayed to the left of the dropdown menu
+    // an array of the franchise names in the input data
+    var franchises = d3.set(data.map(function(d) { return d['floor'];})).values();
+    // create pickers for both the franchise title
+    var dimensions = ['franchise'];
+    var toolbar_labels = ['Label of Customer']; // This will be displayed to the left of the dropdown menu
 
-  // We don't need a for-loop here, since we're only adding a single dropdown menu,
-  // but this code is handy to have if you ever need to add multiple dropdowns, so I'm keeping it in.
-  for(var i_dim in dimensions) {
-    var dim = dimensions[i_dim];
-    var label = toolbar_labels[i_dim];
-    //console.log(i_dim);
+    // We don't need a for-loop here, since we're only adding a single dropdown menu,
+    // but this code is handy to have if you ever need to add multiple dropdowns, so I'm keeping it in.
+    for(var i_dim in dimensions) {
+      var dim = dimensions[i_dim];
+      var label = toolbar_labels[i_dim];
+      //console.log(i_dim);
 
-    // create the <select></select> dropdown menu
-    $('#toolbar').append("<div class='form-group'><label for='"+dim+"-var'>"+label+":</label><select class='form-control' id='"+dim+"-var' value='youth_rate'></select></div>")
-    // populate the dropdown with the movie franchise options (<option></option>)
-    for(i_franchise in franchises) {
-      franchise_name = franchises[i_franchise];
-      $('#'+dim+'-var').append("<option value='"+franchise_name+"'>"+franchise_name+"</option>");
-    }
-    // set picker to saved param values
-    $('#'+dim+'-var').val(params['rate']);
-
-    // handle change to select, wrap in anonymous function so the pickers don't clash
-    $('#'+dim+'-var').change(function(dim) {
-      return function() {
-        var newVar = $('#'+dim+'-var').val();
-        params[dim+'axis'] = newVar;
-        params[dim+'axislabel'] = newVar;
-        params['num'] = $("#franchise-var").val().replace("rate", "number");
-        params['rate'] = $("#franchise-var").val();
-        console.log(params['num'],params['rate'])
-
-        // The order of operation matters here. If 'All' franchises are selected,
-        // we want to return to the default view.
-        // If a specific franchise is selected, we want to highlight only that franchise.
-
-        d3.selectAll('.line_highlight')
-            .style('opacity', function() {return newVar === 'All' ? 0.7 : 0;})
-        d3.selectAll('.circle_highlight')
-            .style('fill', function() {return newVar === 'All' ? '#005b96' : '#b3cde0';})
-            
-        d3.selectAll('.dot')
-          .style('fill', '#b3cde0')
-        d3.selectAll('.curve')
-          .style('opacity', 0)
-        
-        var this_index = franchises.indexOf(newVar)
-
-        draw(data,vis_width,vis_height,params);
+      // create the <select></select> dropdown menu
+      $('#toolbar').append("<div class='form-group'><label for='"+dim+"-var'>"+label+":</label><select class='form-control' id='"+dim+"-var'><option value = All selected>All</option></select></div>")
+      // populate the dropdown with the movie franchise options (<option></option>)
+      for(i_franchise in franchises) {
+        franchise_name = franchises[i_franchise];
+        $('#'+dim+'-var').append("<option value='"+franchise_name+"'>"+franchise_name+"</option>");
       }
-    }(dim));
-  }
+      // set picker to saved param values
+      $('#'+dim+'-var').val(params[dim+'axis']);
+      // handle change to select, wrap in anonymous function so the pickers don't clash
+      $('#'+dim+'-var').change(function(dim) {
+        return function() {
+          var newVar = $('#'+dim+'-var').val();
+          params[dim+'axis'] = newVar;
+          params[dim+'axislabel'] = newVar;
+
+          // The order of operation matters here. If 'All' franchises are selected,
+          // we want to return to the default view.
+          // If a specific franchise is selected, we want to highlight only that franchise.
+          if (newVar === 'All') {
+            d3.selectAll('.dot')
+              .style('fill', '#b3cde0')
+            d3.selectAll('.curve')
+              .style('opacity', 0)
+
+            d3.selectAll('.show_label')
+              .style('opacity', function() {return newVar === 'All' ? 1 : 0;})
+            d3.selectAll('.line_highlight')
+                .style('opacity', function() {return newVar === 'All' ? 0.7 : 0;})
+            d3.selectAll('.circle_highlight')
+                .style('fill', function() {return newVar === 'All' ? '#005b96' : '#b3cde0';})
+          } else {
+            d3.selectAll('.show_label')
+              .style('opacity', function() {return newVar === 'All' ? 1 : 0;})
+              .moveToFront(); //bring to front
+            d3.selectAll('.line_highlight')
+                .style('opacity', function() {return newVar === 'All' ? 0.7 : 0;})
+            d3.selectAll('.circle_highlight')
+                .style('fill', function() {return newVar === 'All' ? '#005b96' : '#b3cde0';})
+
+            d3.selectAll('.dot')
+              .style('fill', '#b3cde0')
+            d3.selectAll('.curve')
+              .style('opacity', 0)
+
+            var this_index = franchises.indexOf(newVar)
+
+            d3.selectAll('.circle_' + this_index)
+                .style('fill', '#005b96')
+                .style('opacity', 1)
+                .moveToFront(); //bring to front
+            d3.selectAll('.line_' + this_index)
+                .style('opacity', 1)
+                .moveToFront(); //bring to front
+          }
+
+        }
+      }(dim));
+    }
 }
 
 // Execute the se functions to actually build the chart
