@@ -33,7 +33,6 @@ draw = function(data, vis_width, vis_height, params) {
         .append('g')
           .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-          
     var xScale = d3.scaleTime()
             // The data range will come from the slider
             .domain([new Date(params['min_date']),new Date(params['max_date'])])
