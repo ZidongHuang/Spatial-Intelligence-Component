@@ -152,7 +152,19 @@ draw = function(data, vis_width, vis_height, params) {
                console.log("bubble_" + d['store_name'])
                d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
                d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
+               d3.select(this)
+                 .moveToFront(); //bring to front;
+               d3.selectAll('.show_label')
+                 .style('opacity', 0)
+
+                  var label = d['store_name'] + '<br/>' +
+                              'Type: ' + d['type'] + '<br/>' +
+                              'Floor: ' + d['floor'] + '<br/>' +
+                              'Enter Rate: ' + d['enter_rate'] + '%' + '<br/>' +
+                              'Enter Count: ' + d['enter_number'] + '<br/>';
+             return showDetails(label,this)
           })
+
           .on('mouseout', function(d,i){
               d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
               d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
@@ -160,8 +172,28 @@ draw = function(data, vis_width, vis_height, params) {
         }
 }
 
-
-
+// Display a tooltip message, above and to the right of the selected object
+  // Here element serves as selector of the bubble that we hovered over
+  var showDetails = function(data, element) {
+    pos = $(element).position()
+    $('#chart-tooltip').html(data)
+    width = $('#chart-tooltip').width()
+    height = $('#chart-tooltip').height()
+    // display the tooltip above and to the right of the selected object
+    $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px')
+    $('#chart-tooltip').show()
+  };
+  // Hide the tooltip whenever we move the mouse back out of a bubble
+  var hideDetails = function() {
+    $('#chart-tooltip').hide()
+  };
+  
+  // Helper fucntion to move objects to the front of the draw queue. This means no other objects will overlap with it.
+  d3.selection.prototype.moveToFront = function() {  
+      return this.each(function(){
+      this.parentNode.appendChild(this);
+      });
+  };
 
 // Create the range slider
 var createSlider = function(data, params) {
