@@ -244,7 +244,7 @@ var createSlider2 = function(data, params) {
       
 // Create a second range slider
   // See http://ionden.com/a/plugins/ion.rangeSlider/index.html for documentation
-  var slider = $("#slider2")
+  var sliderVertical = $("#slider2")
     .ionRangeSlider({
       type: 'double', // make a range slider (use 'single' for a basic slider)
       skin: 'round', // select a default style
@@ -252,6 +252,7 @@ var createSlider2 = function(data, params) {
       max: 100, // max of the range
       from: 0, // min of the default selected range
       to: 100, // max of the default selected range
+  
     
       // When we move the slider we want to
       // * redraw the chart for the selected date range
@@ -271,7 +272,11 @@ var createSlider2 = function(data, params) {
           draw(data,vis_width,vis_height,params);
         }
     })
-  .attr("transform", "translate("+ (width + 50) + "," + (height/2) + ") rotate(-90)")
+      
+
+
+
+
 }
 
 
