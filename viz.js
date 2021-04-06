@@ -168,7 +168,7 @@ draw = function(data, vis_width, vis_height, params) {
           .on('mouseout', function(d,i){
               d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
               d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
-          })
+              return hideDetails();})
         }
 }
 
