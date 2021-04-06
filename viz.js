@@ -239,41 +239,42 @@ var createSlider2 = function(data, params) {
 
   // Set the width and left offset of the slider, such that it aligns with the start and end of our X scale
   $('#slider-container2')
-      .height(650 + 20) // = vis_width - left.margin - right.margin (+ 20px to align the slider handles)
+      .height(20) // = vis_width - left.margin - right.margin (+ 20px to align the slider handles)
       .offset({right: 50 - 10})
       
+      
 // Create a second range slider
-  // See http://ionden.com/a/plugins/ion.rangeSlider/index.html for documentation
-  var slider = $("#slider2")
-    .ionRangeSlider({
-      type: 'double', // make a range slider (use 'single' for a basic slider)
-      skin: 'round', // select a default style
-      min: 0, // min of the range
-      max: 100, // max of the range
-      from: 0, // min of the default selected range
-      to: 100, // max of the default selected range
-    
-      // When we move the slider we want to
-      // * redraw the chart for the selected date range
-      // * any highlighted franchises should stay the highlighted ('All' or a specific franchise selected from the dropdown menu)
-      onChange: function(newRange){
-          // Before redrawing the chart, we need to remove its current contents
-          d3.selectAll('text').remove()
-          d3.selectAll('circle').remove()
-          d3.selectAll('line').remove()
-          d3.selectAll('path').remove()
+// See http://ionden.com/a/plugins/ion.rangeSlider/index.html for documentation
+var slider2 = $("#slider2")
+  .attr("transform", "rotate(90)")
+  .ionRangeSlider({
+    type: 'double', // make a range slider (use 'single' for a basic slider)
+    skin: 'round', // select a default style
+    min: 0, // min of the range
+    max: 100, // max of the range
+    from: 0, // min of the default selected range
+    to: 100, // max of the default selected range
+  
+    // When we move the slider we want to
+    // * redraw the chart for the selected date range
+    // * any highlighted franchises should stay the highlighted ('All' or a specific franchise selected from the dropdown menu)
+    onChange: function(newRange){
+        // Before redrawing the chart, we need to remove its current contents
+        d3.selectAll('text').remove()
+        d3.selectAll('circle').remove()
+        d3.selectAll('line').remove()
+        d3.selectAll('path').remove()
 
-          // Read the new range values and store them in the 'parameters' object
-          params['min_percent'] = `${newRange['from']}`;
-          params['max_percent'] = `${newRange['to']}`
+        // Read the new range values and store them in the 'parameters' object
+        params['min_percent'] = `${newRange['from']}`;
+        params['max_percent'] = `${newRange['to']}`
 
-          // Redraw the chart. The new X scale will read from params to set its new range!
-          draw(data,vis_width,vis_height,params);
-        }
-    })
-  .attr("transform", "translate("+ (width + 50) + "," + (height/2) + ") rotate(-90)")
+        // Redraw the chart. The new X scale will read from params to set its new range!
+        draw(data,vis_width,vis_height,params);
+      }
+  })
 }
-
+$('#slider2').attr('transform','rotate(90)')
 
 // Create a dropdown menu allowing users to select a specific franchise or return to the default view ('All')
 var createToolbar = function(data, params) {
