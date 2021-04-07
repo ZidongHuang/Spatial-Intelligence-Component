@@ -197,8 +197,11 @@ draw = function(data, vis_width, vis_height, params) {
                        showDetails(label,this);
 
                        d3.selectAll(".text_" + d["store_name"])
-                         .text(d => d[params['rate']] + "%")
+                         .text((d,index) => {
+                             return d[params['rate']] + "%"
+                       })
                          .attr('opacity', 0.7)
+
                   })
                   .on('mouseout', function(d,i){
                     if(clicked === false){
@@ -210,6 +213,7 @@ draw = function(data, vis_width, vis_height, params) {
                     })
                   .on('click', (d,i) => {
                     clicked = !clicked;
+
                   })
       }
 }
@@ -340,7 +344,6 @@ createSlider(data, params);
 createToolbar(data, params);
 draw(data,vis_width,vis_height,params);
 
-d3.select("#clear_button").on('click', draw(data,vis_width,vis_height,params));
 // Append a div container to the #vis div containter. This container will hold our tooltips.
 // Hide the tooltips by default, we'll display them only when the user hovers over a bubble.
 $('#vis').append("<div class='tooltip' id='chart-tooltip'></div>");

@@ -26125,15 +26125,21 @@
 <body>
   <!-- Titles -->
   <div id='title' style='width:1366px;'>
-    <h1>Spatial Intelligence</h1>
-    <h2>Who is visiting the mall?</h2>
-    <br></br>
+    <h1 style = 'color: #005B96'>Spatial Intelligence</h1>
+    </br>
+    <h2 style = 'color: #005B96; font-size: 18px'>The following graph helps you understand the customer visited the shopping mall in Feb 2021.</h2>
+    <h2 style = 'color: #005B96; font-size: 18px'>Bubble Size represents the number of current cusomer type entering the store. Percentage = number / total entering number.  (Visual legends are in progress) </h2>
+    </br>
+    <h2 style = 'color: #005B96; font-size:20px'>CLICK the bubble if you would like to keep its trend path stay on the screen for comparison. Click again to remove it. </h2>
+
+  </br>
   </div>
 
   <!-- A div contaimer for the customer type selector dropdown menu -->
   <div id='toolbar'></div>
 
-  <!-- A div container for the range slider, allowing users to control the time period displayed-->
+  <!-- A div container for the range
+  , allowing users to control the time period displayed-->
   <label>Time Range</label>
   <div id='slider-container' style='width:1366px; height:50px;'>
     <!-- A place holder input. This will be overwritten by the range slider when we create it, but it needs an id to hang the slider onto -->
@@ -26150,8 +26156,9 @@
   <div id='legend' style='width:1366px;'> </div>
 
   <script type="text/javascript" src="viz.js"></script>
-  <button type="button" id = "clear_button" onclick = "draw(data,vis_width,vis_height,params)" style='position:absolute; left: 1220px'>Clear Selection</button>
+  <button type="button" id = "clear_button" onclick = "draw(data,vis_width,vis_height,params)" style='position:absolute; left: 1220px'>Clear All Selection</button>
 </body>
+
 
 </html>
 
