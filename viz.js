@@ -152,6 +152,7 @@ draw = function(data, vis_width, vis_height, params) {
     };
 
     // Then add the bubbles to the chart (one for each store in each eay)
+
     for (i = 0; i < storeName.length; i++) {
       var storeName_filt = storeName[i];
       var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
@@ -209,25 +210,24 @@ draw = function(data, vis_width, vis_height, params) {
                     })
                   .on('click', (d,i) => {
                     clicked = !clicked;
-                  });
+                  })
       }
 }
 
-// Display a tooltip message, above and to the right of the selected object
-  // Here element serves as selector of the bubble that we hovered over
-  var showDetails = function(data, element) {
-    pos = $(element).position()
-    $('#chart-tooltip').html(data)
-    width = $('#chart-tooltip').width()
-    height = $('#chart-tooltip').height()
-    // display the tooltip above and to the right of the selected object
-    $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px')
-    $('#chart-tooltip').show()
-    //console.log(element.className['baseVal']);
-  };
+
+var showDetails = function(data, element) {
+  pos = $(element).position()
+  $('#chart-tooltip').html(data)
+  width = $('#chart-tooltip').width()
+  height = $('#chart-tooltip').height()
+  // display the tooltip above and to the right of the selected object
+  $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px')
+  $('#chart-tooltip').show()
+  //console.log(element.className['baseVal']);
+};
 
   // Hide the tooltip whenever we move the mouse back out of a bubble
-  var hideDetails = function() {
+var hideDetails = function() {
     $('#chart-tooltip').hide()
   };
 
@@ -236,7 +236,7 @@ draw = function(data, vis_width, vis_height, params) {
       return this.each(function(){
       this.parentNode.appendChild(this);
       });
-  };
+};
 
 // Create the range slider
 var createSlider = function(data, params) {
@@ -340,6 +340,7 @@ createSlider(data, params);
 createToolbar(data, params);
 draw(data,vis_width,vis_height,params);
 
+d3.select("#clear_button").on('click', draw(data,vis_width,vis_height,params));
 // Append a div container to the #vis div containter. This container will hold our tooltips.
 // Hide the tooltips by default, we'll display them only when the user hovers over a bubble.
 $('#vis').append("<div class='tooltip' id='chart-tooltip'></div>");
