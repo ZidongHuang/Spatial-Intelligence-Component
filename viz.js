@@ -149,7 +149,7 @@ draw = function(data, vis_width, vis_height, params) {
           .style('fill', d => d3.schemeTableau10[type_color[d.type]])
           .style('fill-opacity', 0.5)
           .on('mouseover', function(d,i){
-               console.log("bubble_" + d['store_name'])
+              //  console.log("bubble_" + d['store_name'])
                d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
                d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
                d3.select(this)
@@ -175,13 +175,26 @@ draw = function(data, vis_width, vis_height, params) {
 // Display a tooltip message, above and to the right of the selected object
   // Here element serves as selector of the bubble that we hovered over
   var showDetails = function(data, element) {
-    pos = $(element).position()
-    $('#chart-tooltip').html(data)
-    width = $('#chart-tooltip').width()
-    height = $('#chart-tooltip').height()
+    pos = $(element).position();
+    $('#chart-tooltip').html(data);
+    width = $('#chart-tooltip').width();
+    height = $('#chart-tooltip').height();
     // display the tooltip above and to the right of the selected object
-    $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px')
-    $('#chart-tooltip').show()
+    $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px');
+    $('#chart-tooltip').show();
+
+    // display percent for every data point
+    const class_name = data.split('<br/>')[0]
+    const percent = data.split('<br/>')[3].split(':').pop()
+    d3.selectAll(`.${class_name}`)
+      .append('text')
+      .attr('x',this.cx)
+      .attr('y',this.cy)
+      .attr('fill', '#ccc')
+      .attr('font-family', 'Helvetica Neue, Arial')
+      .attr('font-weight', 500)
+      .attr('font-size', 80)
+      .text(percent)
   };
   // Hide the tooltip whenever we move the mouse back out of a bubble
   var hideDetails = function() {
@@ -269,7 +282,6 @@ var createToolbar = function(data, params) {
         params[dim+'axislabel'] = newVar;
         params['num'] = $("#franchise-var").val().replace("rate", "number");
         params['rate'] = $("#franchise-var").val();
-        console.log(params['num'],params['rate'])
 
         // The order of operation matters here. If 'All' franchises are selected,
         // we want to return to the default view.
