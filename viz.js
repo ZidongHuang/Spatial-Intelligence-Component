@@ -1,3 +1,6 @@
+//flag = 7/4 Wed morning
+//newest version with: dynamic scaling, single tooltip, complete dropdown
+//pending: chained tooltip, click to stay
 var data = JSON.parse(document.getElementById('data').innerHTML);
 var vis_width = 1366; // outer width
 var vis_height = 650; // outer height
@@ -12,8 +15,10 @@ draw = function(data, vis_width, vis_height, params) {
     var width = vis_width - margin.left - margin.right, // inner width
         height = vis_height - margin.top - margin.bottom; // inner height
 
-    //remove the older canvas
-    d3.select('.chart-outer').remove()
+    //remove the older canvas when redraw
+    d3.select('.chart-outer')
+      .remove()
+
     d3.select('#vis')
       .append('svg')
       .attr('class','chart-outer')
@@ -27,27 +32,29 @@ draw = function(data, vis_width, vis_height, params) {
 
     // Translate the inner chart to the left and down to create margins.
     // Any new object that we append to 'g' will automatically inherit these translations
-    var svg = d3.select('.chart').append('svg')
-          .attr('width', vis_width)
-          .attr('height', vis_height)
-        .append('g')
-          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    var svg = d3.select('.chart')
+                .append('svg')
+                .attr('width', vis_width)
+                .attr('height', vis_height)
+                .append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var xScale = d3.scaleTime()
-            // The data range will come from the slider
-            .domain([new Date(params['min_date']),new Date(params['max_date'])])
-            .range([0, width])
+    var xScale = d3.scaleTime()// The data range will come from the slider
+                   .domain([new Date(params['min_date']),new Date(params['max_date'])])
+                   .range([0, width])
 
     var yScale = d3.scaleLinear()
-      .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
-      .range([height, 0]);
+                   .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
+                   .range([height, 0]);
+
+    var yScaleStatic = d3.scaleLinear()
+                         .domain([0, 100])
+                         .range([height, 0]);
 
     var bubbleScale = d3.scaleLinear()
-        // This controls the minimum and maximum size of the bubbles
-        .range([10,1000])
-        // The '_.' indicates an Underscore function. Here we use it to extract a column from the JSON table and calulate the min and max
-        .domain([_.min(data.map(function(d) { return d[params['num']];})),
-                 _.max(data.map(function(d) { return d[params['num']];}))]);
+                        .range([10,1000])
+                        .domain([_.min(data.map(function(d) { return d[params['num']];})),
+                                 _.max(data.map(function(d) { return d[params['num']];}))]);
 
     // A line generator function. We'll use this later to draw the curves connected movies belonging to the same franchise
     var line = d3.line()
@@ -66,11 +73,11 @@ draw = function(data, vis_width, vis_height, params) {
 
     // Add a title to the Y axis
     svg.append("text")
-          .attr("class", "axis_title")
-          .attr("text-anchor", "middle") // Anchor the text to its center. This is the point we will translate and rotate about
-                                         // Translate and rotate the axis title to get it in the right position
-          .attr("transform", "translate("+ (width + 50) + "," + (height/2) + ") rotate(-90)")
-          .text("Customer Percentage");
+       .attr("class", "axis_title")
+       .attr("text-anchor", "middle") // Anchor the text to its center. This is the point we will translate and rotate about
+                                     // Translate and rotate the axis title to get it in the right position
+       .attr("transform", "translate("+ (width + 50) + "," + (height/2) + ") rotate(-90)")
+       .text("Customer Percentage");
 
     // Define a table of day. We'll add a vertical marker line at each of these days.
     var date_labels = [{date: '2021-2-1'},
@@ -102,7 +109,7 @@ draw = function(data, vis_width, vis_height, params) {
       .enter().append('text')
         .attr('class', 'date_label_top')
         .attr('x', function(d) {return xScale(new Date(d['date'] ));})
-        .attr('y', yScale(100) - 10)
+        .attr('y', yScaleStatic(100) - 10)
         .text(function(d) {return d['date'].slice(5,10)})
 
     // Add a label at the bottom of the date markers
@@ -111,7 +118,7 @@ draw = function(data, vis_width, vis_height, params) {
       .enter().append('text')
         .attr('class', 'date_label_bottom')
         .attr('x', function(d) {return xScale(new Date(d['date'] ));})
-        .attr('y', yScale(0) + 20)
+        .attr('y', yScaleStatic(0) + 20)
         .text(function(d) {return d['date'].slice(5,10)})
 
     // Add the curves to the chart (one for each specific store). Draw curves first to be underneath bubbles
@@ -149,26 +156,29 @@ draw = function(data, vis_width, vis_height, params) {
           .style('fill', d => d3.schemeTableau10[type_color[d.type]])
           .style('fill-opacity', 0.5)
           .on('mouseover', function(d,i){
-               console.log("bubble_" + d['store_name'])
+               //console.log("bubble_" + d['store_name'])
                d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
                d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
                d3.select(this)
                  .moveToFront(); //bring to front;
-               d3.selectAll('.show_label')
-                 .style('opacity', 0)
+               // d3.selectAll('.show_label')
+               //   .style('opacity', 0)
 
-                  var label = d['store_name'] + '<br/>' +
-                              'Type: ' + d['type'] + '<br/>' +
-                              'Floor: ' + d['floor'] + '<br/>' +
-                              'Enter Rate: ' + d['enter_rate'] + '%' + '<br/>' +
-                              'Enter Count: ' + d['enter_number'] + '<br/>';
-             return showDetails(label,this)
+               var label = d['store_name'] + '<br/>' +
+                            'Type: ' + d['type'] + '<br/>' +
+                            //'Floor: ' + d['floor'] + '<br/>' +
+                            'Number: ' + d[params['num']] + '<br/>' +
+                            'Percentage ' + d[params['rate']] + '%' + '<br/>' ;
+
+               showDetails(label,this);
+
+
           })
 
           .on('mouseout', function(d,i){
               d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
               d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
-              return hideDetails();})
+              hideDetails();});
         }
 }
 
@@ -182,14 +192,16 @@ draw = function(data, vis_width, vis_height, params) {
     // display the tooltip above and to the right of the selected object
     $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px')
     $('#chart-tooltip').show()
+    //console.log(element.className['baseVal']);
   };
+
   // Hide the tooltip whenever we move the mouse back out of a bubble
   var hideDetails = function() {
     $('#chart-tooltip').hide()
   };
-  
+
   // Helper fucntion to move objects to the front of the draw queue. This means no other objects will overlap with it.
-  d3.selection.prototype.moveToFront = function() {  
+  d3.selection.prototype.moveToFront = function() {
       return this.each(function(){
       this.parentNode.appendChild(this);
       });
@@ -233,7 +245,6 @@ var createSlider = function(data, params) {
       }
   });
 }
-
 
 // Create a dropdown menu allowing users to select a specific franchise or return to the default view ('All')
 var createToolbar = function(data, params) {
