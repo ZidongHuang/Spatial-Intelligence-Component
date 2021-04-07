@@ -1,6 +1,6 @@
 //flag = 7/4 Wed afternoon
-//newest version with: dynamic scaling, single tooltip, complete dropdown, chained tooltip
-//pending: click to stay
+//newest version with: dynamic scaling, single tooltip, complete dropdown, chained tooltip, click to stay
+//pending: vertical zoom
 var data = JSON.parse(document.getElementById('data').innerHTML);
 var vis_width = 1366; // outer width
 var vis_height = 650; // outer height
@@ -9,8 +9,14 @@ var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_bab
 var floor_color = {B1: 1, B2: 2, L1: 3, L2: 4, L3: 5, L4: 6, L5: 7, L6: 8}
 
 draw = function(data, vis_width, vis_height, params) {
-    // Define margins between the outer chart and the inner chart (the actual plotting area)
-    // This creates space for axes, labels and tooltips
+    // var zoom = d3.zoom()
+    //              .scaleExtent([1,10])
+    //              .on("zoom", zoomed);
+    // function zoomed() {
+    //   const currentTransform = d3.event.transform;
+    //   container.attr("transform", currentTransform);
+    // }
+
     var margin = {top: 30, right: 50, bottom: 30, left: 50};
     var width = vis_width - margin.left - margin.right, // inner width
         height = vis_height - margin.top - margin.bottom; // inner height
@@ -23,7 +29,7 @@ draw = function(data, vis_width, vis_height, params) {
       .append('svg')
       .attr('class','chart-outer')
       .append('g')
-      .attr('class','chart')
+      .attr('class','chart');
 
     // Set the dimensions of the outer chart
     d3.select('.chart-outer')
@@ -127,29 +133,31 @@ draw = function(data, vis_width, vis_height, params) {
     var storeName = d3.set(data.map(function(d) { return d['store_name'];})).values();
 
     for (var i = 0; i < storeName.length; i++) {
-        var storeName_filt = storeName[i];
-        var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
-            data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
+      var storeName_filt = storeName[i];
+      var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
+          data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
 
-        container_path = svg.append('g')
-                            .attr('class', "groupPath_" + storeName_filt)
+      container_path = svg.append('g')
+                          .attr('class', "groupPath_" + storeName_filt)
 
-        path = container_path.append('path')
-                            .datum(data_filt)
-                            //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
-                            .attr('class', "curve_" + storeName_filt)
-                            .attr('d', line) // call the line generator function defined earlier
-                            .style('fill', 'none')
-                            .style('stroke', d => d3.schemeTableau10[type_color[d[0].type]])
-                            .style('stroke-width', 2)
-                            .style('stroke-opacity', 0)
+      path = container_path.append('path')
+                          .datum(data_filt)
+                          //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
+                          .attr('class', "curve_" + storeName_filt)
+                          .attr('d', line) // call the line generator function defined earlier
+                          .style('fill', 'none')
+                          .style('stroke', d => d3.schemeTableau10[type_color[d[0].type]])
+                          .style('stroke-width', 2)
+                          .style('stroke-opacity', 0)
     };
 
     // Then add the bubbles to the chart (one for each store in each eay)
     for (i = 0; i < storeName.length; i++) {
-        var storeName_filt = storeName[i];
-        var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
+      var storeName_filt = storeName[i];
+      var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
+      let clicked = false;
 
+      //console.log(data_filt)
       container_bubble = svg.append('g')
                      .attr('class', "groupCircle_" + storeName_filt)
 
@@ -190,14 +198,18 @@ draw = function(data, vis_width, vis_height, params) {
                        d3.selectAll(".text_" + d["store_name"])
                          .text(d => d[params['rate']] + "%")
                          .attr('opacity', 0.7)
-
                   })
                   .on('mouseout', function(d,i){
+                    if(clicked === false){
                       d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
-                      d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
                       d3.selectAll(".text_" + d["store_name"]).text('');
-                      hideDetails();});
-
+                      d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
+                      }
+                      hideDetails();
+                    })
+                  .on('click', (d,i) => {
+                    clicked = !clicked;
+                  });
       }
 }
 
