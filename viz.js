@@ -1,6 +1,6 @@
-//flag = 7/4 Wed morning
-//newest version with: dynamic scaling, single tooltip, complete dropdown
-//pending: chained tooltip, click to stay
+//flag = 7/4 Wed afternoon
+//newest version with: dynamic scaling, single tooltip, complete dropdown, chained tooltip
+//pending: click to stay
 var data = JSON.parse(document.getElementById('data').innerHTML);
 var vis_width = 1366; // outer width
 var vis_height = 650; // outer height
@@ -97,16 +97,17 @@ draw = function(data, vis_width, vis_height, params) {
         .enter()
         .append('line')
         .attr('class', 'date_marker')
-        .attr('y1', yScale(0))
+        .attr('y1', yScaleStatic(0))
         .attr('x1', function(d) {return xScale(new Date(d['date'] ));})
         .attr('x2', function(d) {return xScale(new Date(d['date'] ));})
-        .attr('y2', yScale(100))
+        .attr('y2', yScaleStatic(100))
         .style('stroke', '#E3E9ED')
 
     // Add a label at the top of the date markers
     svg.selectAll('.date_label_top')
         .data(date_labels)
-      .enter().append('text')
+        .enter()
+        .append('text')
         .attr('class', 'date_label_top')
         .attr('x', function(d) {return xScale(new Date(d['date'] ));})
         .attr('y', yScaleStatic(100) - 10)
@@ -115,7 +116,8 @@ draw = function(data, vis_width, vis_height, params) {
     // Add a label at the bottom of the date markers
     svg.selectAll('.date_label_bottom')
         .data(date_labels)
-      .enter().append('text')
+        .enter()
+        .append('text')
         .attr('class', 'date_label_bottom')
         .attr('x', function(d) {return xScale(new Date(d['date'] ));})
         .attr('y', yScaleStatic(0) + 20)
@@ -129,57 +131,77 @@ draw = function(data, vis_width, vis_height, params) {
         var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
             data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
 
-        svg.append('path')
-            .datum(data_filt)
-            //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
-            .attr('class', "curve_" + storeName_filt)
-            .attr('d', line) // call the line generator function defined earlier
-            .style('fill', 'none')
-            .style('stroke', d => d3.schemeTableau10[type_color[d[0].type]])
-            .style('stroke-width', 2)
-            .style('stroke-opacity', 0)
+        container_path = svg.append('g')
+                            .attr('class', "groupPath_" + storeName_filt)
+
+        path = container_path.append('path')
+                            .datum(data_filt)
+                            //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
+                            .attr('class', "curve_" + storeName_filt)
+                            .attr('d', line) // call the line generator function defined earlier
+                            .style('fill', 'none')
+                            .style('stroke', d => d3.schemeTableau10[type_color[d[0].type]])
+                            .style('stroke-width', 2)
+                            .style('stroke-opacity', 0)
     };
 
     // Then add the bubbles to the chart (one for each store in each eay)
     for (i = 0; i < storeName.length; i++) {
         var storeName_filt = storeName[i];
         var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
-        svg.selectAll('.circle_' + i)
-          .data(data_filt)
-          .enter()
-          .append('circle')
-          .attr('class', d => d['store_name'])
-          .attr('cx', function(d) { return xScale(new Date(d['date']));})
-          .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
-          .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
-          .style('stroke-width', 0)
-          .style('fill', d => d3.schemeTableau10[type_color[d.type]])
-          .style('fill-opacity', 0.5)
-          .on('mouseover', function(d,i){
-               //console.log("bubble_" + d['store_name'])
-               d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
-               d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
-               d3.select(this)
-                 .moveToFront(); //bring to front;
-               // d3.selectAll('.show_label')
-               //   .style('opacity', 0)
 
-               var label = d['store_name'] + '<br/>' +
-                            'Type: ' + d['type'] + '<br/>' +
-                            //'Floor: ' + d['floor'] + '<br/>' +
-                            'Number: ' + d[params['num']] + '<br/>' +
-                            'Percentage ' + d[params['rate']] + '%' + '<br/>' ;
+      container_bubble = svg.append('g')
+                     .attr('class', "groupCircle_" + storeName_filt)
 
-               showDetails(label,this);
+      text = container_bubble.selectAll("text")
+                .data(data_filt)
+                .enter()
+                .append('text')
+                .attr('text-anchor', 'middle')
+                .attr('class', d => "text_" + d["store_name"])
+                .attr('x', function(d) { return xScale(new Date(d['date']));})
+                .attr('y', function(d) { return yScale(parseFloat(d[params['rate']])) + 20 + Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
+
+      bubble = container_bubble.selectAll('circle')
+                  .data(data_filt)
+                  .enter()
+                  .append('circle')
+                  .attr('class', d => d['store_name'])
+                  .attr('cx', function(d) { return xScale(new Date(d['date']));})
+                  .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
+                  .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
+                  .style('stroke-width', 0)
+                  .style('fill', d => d3.schemeTableau10[type_color[d.type]])
+                  .style('fill-opacity', 0.5)
+                  .on('mouseover', function(d,i){
+                       //console.log(d)
+                       d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
+                       d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
+                       d3.select(this).moveToFront(); //bring to front;
+                       // d3.selectAll('.show_label')
+                       //   .style('opacity', 0)
+                       var label = d['store_name'] + '<br/>' +
+                                    'Type: ' + d['type'] + '<br/>' +
+                                    //'Floor: ' + d['floor'] + '<br/>' +
+                                    'Number: ' + d[params['num']] + '<br/>' +
+                                    'Percentage ' + d[params['rate']] + '%' + '<br/>' ;
+                       showDetails(label,this);
+
+                       d3.selectAll(".text_" + d["store_name"])
+                         .text(d => d[params['rate']] + "%")
+                         .attr('opacity', 0.7)
+
+                  })
+                  .on('mouseout', function(d,i){
+                      d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
+                      d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
+                      d3.selectAll(".text_" + d["store_name"]).text('');
+                      hideDetails();});
+      }
 
 
-          })
 
-          .on('mouseout', function(d,i){
-              d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
-              d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
-              hideDetails();});
-        }
+
 }
 
 // Display a tooltip message, above and to the right of the selected object
@@ -310,6 +332,6 @@ createToolbar(data, params);
 draw(data,vis_width,vis_height,params);
 
 // Append a div container to the #vis div containter. This container will hold our tooltips.
-$('#vis').append("<div class='tooltip' id='chart-tooltip'></div>");
 // Hide the tooltips by default, we'll display them only when the user hovers over a bubble.
+$('#vis').append("<div class='tooltip' id='chart-tooltip'></div>");
 $('#chart-tooltip').hide();
