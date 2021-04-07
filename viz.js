@@ -5,7 +5,7 @@ var data = JSON.parse(document.getElementById('data').innerHTML);
 var vis_width = 1366; // outer width
 var vis_height = 650; // outer height
 var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
-var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 7};
+var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 9};
 var floor_color = {B1: 1, B2: 2, L1: 3, L2: 4, L3: 5, L4: 6, L5: 7, L6: 8}
 
 draw = function(data, vis_width, vis_height, params) {
@@ -180,11 +180,11 @@ draw = function(data, vis_width, vis_height, params) {
                        d3.select(this).moveToFront(); //bring to front;
                        // d3.selectAll('.show_label')
                        //   .style('opacity', 0)
-                       var label = d['store_name'] + '<br/>' +
-                                    'Type: ' + d['type'] + '<br/>' +
+                       var label = 'Store name: ' + d['store_name'] + '<br/>' +
+                                    'Business type: ' + d['type'] + '<br/>' +
                                     //'Floor: ' + d['floor'] + '<br/>' +
-                                    'Number: ' + d[params['num']] + '<br/>' +
-                                    'Percentage ' + d[params['rate']] + '%' + '<br/>' ;
+                                    'Number of ' + params['num'].split('_')[0] + ': ' + d[params['num']] + '<br/>' +
+                                    'Percentage of '+ params['num'].split('_')[0] + ': ' + d[params['rate']] + '%' + '<br/>' ;
                        showDetails(label,this);
 
                        d3.selectAll(".text_" + d["store_name"])
@@ -197,11 +197,8 @@ draw = function(data, vis_width, vis_height, params) {
                       d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
                       d3.selectAll(".text_" + d["store_name"]).text('');
                       hideDetails();});
+
       }
-
-
-
-
 }
 
 // Display a tooltip message, above and to the right of the selected object
