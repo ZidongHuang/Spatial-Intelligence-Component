@@ -19,3 +19,6 @@ http://paperjs.org/
 
 Movie_Franchise
 https://github.com/civisanalytics/d3_tutorial
+
+Final projects: trace map/30min time frame
+https://codepen.io/SitePoint/pen/wWJXoK
