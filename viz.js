@@ -1,9 +1,11 @@
+
 var data = JSON.parse(document.getElementById('data').innerHTML);
 var vis_width = 1366; // outer width
 var vis_height = 650; // outer height
 var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
 var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 7};
 var floor_color = {B1: 1, B2: 2, L1: 3, L2: 4, L3: 5, L4: 6, L5: 7, L6: 8}
+
 
 draw = function(data, vis_width, vis_height, params) {
     // Define margins between the outer chart and the inner chart (the actual plotting area)
