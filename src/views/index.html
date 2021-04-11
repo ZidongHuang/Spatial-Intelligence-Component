@@ -7,69 +7,70 @@
 
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <!-- Load D3.js v5 -->
-  <script src='https://d3js.org/d3.v5.min.js'></script>
-  <!-- Load jQuery.js, great for selecting (and subsequently manipualting) objects on the page -->
-  <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
-  <!-- Load Underscore.js, a utility library for operating on arrays (filter, sort, min, max) -->
-  <script src='/static/js/underscore.js'></script>
-  <!-- Load Bootstrap's stylesheet (CSS). It defines the default style of, among other things, the dropdown menu -->
-  <link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet'>
-  <!-- Load Ion's rangeSlider.js, to create and style a range slider -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
-  <!-- Load the default stylesheet (CSS) for the slider -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
-  <!-- CSS style section -->
-  <link rel="stlyesheet" href="/static/css/style.css">
+  <head>
+    <meta charset="utf-8">
+    <!-- Load D3.js v5 -->
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <!-- Load jQuery.js, great for selecting (and subsequently manipualting) objects on the page -->
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+    <!-- Load Underscore.js, a utility library for operating on arrays (filter, sort, min, max) -->
+    <script src="/static/js/underscore.js"></script>
+    <!-- Load Bootstrap's stylesheet (CSS). It defines the default style of, among other things, the dropdown menu -->
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet'>
+    <!-- Load Ion's rangeSlider.js, to create and style a range slider -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+    <!-- Load the default stylesheet (CSS) for the slider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
+    <!-- CSS style section -->
+    <link rel="stlyesheet" href="/static/css/style.css">
 
-  <!-- data -->
-  <script type='application/json' id='data'></script>
-  <script type='text/javascript'>
-    d3.json("../../../public/data/data.json", function(error, data) {
-    console.log(data)
-  });
-  </script>
+    <!-- data -->
+    <script type='application/json' id='data'></script>
+    <script type='text/javascript'>
+      $.getJSON( "/static/data/data.json", function( data ) {
+       
+        document.getElementById("data").innerHTML = JSON.stringify(data)
+      });
+    </script>
 
-</head>
+    <!-- visualization -->
+    <script src="/static/js/viz.js"></script>
+  </head>
 
-<body>
-  <!-- Titles -->
-  <div id='title' style='width:1366px;'>
-    <h1 style = 'color: #005B96'>Spatial Intelligence</h1>
-    </br>
-    <h2 style = 'color: #005B96; font-size: 18px'>The following graph helps you understand the customer visited the shopping mall in Feb 2021.</h2>
-    <h2 style = 'color: #005B96; font-size: 18px'>Bubble Size represents the number of current cusomer type entering the store. Percentage = number / total entering number.  (Visual legends are in progress) </h2>
-    </br>
-    <h2 style = 'color: #005B96; font-size:20px'>CLICK the bubble if you would like to keep its trend path stay on the screen for comparison. Click again to remove it. </h2>
+  <body>
+    <!-- Titles -->
+    <div id='title' style='width:1366px;'>
+      <h1 style = 'color: #005B96'>Spatial Intelligence</h1>
+      </br>
+      <h2 style = 'color: #005B96; font-size: 18px'>The following graph helps you understand the customer visited the shopping mall in Feb 2021.</h2>
+      <h2 style = 'color: #005B96; font-size: 18px'>Bubble Size represents the number of current cusomer type entering the store. Percentage = number / total entering number.  (Visual legends are in progress) </h2>
+      </br>
+      <h2 style = 'color: #005B96; font-size:20px'>CLICK the bubble if you would like to keep its trend path stay on the screen for comparison. Click again to remove it. </h2>
 
-    </br>
-  </div>
+      </br>
+    </div>
 
-  <!-- A div contaimer for the customer type selector dropdown menu -->
-  <div id='toolbar'></div>
+    <!-- A div contaimer for the customer type selector dropdown menu -->
+    <div id='toolbar'></div>
 
-  <!-- A div container for the range
-  , allowing users to control the time period displayed-->
-  <label>Time Range</label>
-  <div id='slider-container' style='width:1366px; height:50px;'>
-    <!-- A place holder input. This will be overwritten by the range slider when we create it, but it needs an id to hang the slider onto -->
-    <input type='text' id='slider' name='slider' value=''></input>
-  </div>
+    <!-- A div container for the range
+    , allowing users to control the time period displayed-->
+    <label>Time Range</label>
+    <div id='slider-container' style='width:1366px; height:50px;'>
+      <!-- A place holder input. This will be overwritten by the range slider when we create it, but it needs an id to hang the slider onto -->
+      <input type='text' id='slider' name='slider' value=''></input>
+    </div>
 
 
 
-  <!-- A div container for the main visualization -->
-  <div id='vis' style='width:1366px;'>
-    <svg class='chart-outer'><g class='chart'></g></svg>
-  </div>
+    <!-- A div container for the main visualization -->
+    <div id='vis' style='width:1366px;'>
+      <svg class='chart-outer'><g class='chart'></g></svg>
+    </div>
 
-  <div id='legend' style='width:1366px;'> </div>
-
-  <script type="text/javascript" src="/static/js/viz.js"></script>
-  <button type="button" id = "clear_button" onclick = "draw(data,vis_width,vis_height,params)" style='position:absolute; left: 1220px'>Clear All Selection</button>
-</body>
+    <div id='legend' style='width:1366px;'> </div>
+    <button type="button" id = "clear_button" onclick = "draw(data,vis_width,vis_height,params)" style='position:absolute; left: 1220px'>Clear All Selection</button>
+  </body>
 
 
 </html>
