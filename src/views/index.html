@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!--
+//flag = 7/4 Wed afternoon
+//newest version with: dynamic scaling, single tooltip, complete dropdown, chained tooltip, click to stay
+//pending: vertical zoom
+-->
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <!-- Load D3.js v5 -->
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <!-- Load jQuery.js, great for selecting (and subsequently manipualting) objects on the page -->
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+    <!-- Load Underscore.js, a utility library for operating on arrays (filter, sort, min, max) -->
+    <script src="/static/js/underscore.js"></script>
+    <!-- Load Bootstrap's stylesheet (CSS). It defines the default style of, among other things, the dropdown menu -->
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet'>
+    <!-- Load Ion's rangeSlider.js, to create and style a range slider -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+    <!-- Load the default stylesheet (CSS) for the slider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
+    <!-- CSS style section -->
+    <!-- <link rel="stlyesheet" type='text/css' href="/static/public/css/main.css"/> -->
+    <style>
+      /* This is an example of a CSS comment (only used within the style section) */
+      
+      /* Import the Baloo Thambi font from Google Fonts  */ 
+      @import url('https://fonts.googleapis.com/css?family=Baloo+Thambi');
+    
+       .form-group {
+         display: inline-block;
+         margin-right: 10px;
+       }
+       
+       .form-control {
+         display: inline-block;
+         margin-left: 10px;
+         margin-right: 10px;
+         width: 375;
+       }
+    
+       * {
+         margin:0;
+         padding:0;
+         font-family: Baloo Thambi;
+       }
+    
+       h1 {
+         font-size:16px sans-serif;
+         margin-left: 10px;
+         line-height:0.2em;
+         font-weight: bold;
+         font-family: Baloo Thambi;
+       }
+    
+       h2 {
+         font: 15px sans-serif;
+         margin-left: 10px;
+         line-height:0.2em;
+         font-weight: bold;
+         font-family: Baloo Thambi;
+       }
+       
+       p {
+         fill: #8FA2AC;
+         font-family: Baloo Thambi;
+         font-size: 12px;
+       }
+    
+       .axis text {
+         fill: #8FA2AC;
+         font: 12px sans-serif;
+         font-family: Baloo Thambi;
+       }
+       
+       .axis_title {
+         fill: #8FA2AC;
+         text-anchor: middle;
+         font-family: Baloo Thambi;
+       }
+    
+       .axis path,
+       .axis line {
+         fill: none;
+         stroke: none;
+         shape-rendering: crispEdges;
+       }
+    
+       .chart {
+         font-family: Baloo Thambi;
+       }
+    
+       .date_marker {
+         stroke-width: 1px;
+       }
+    
+       .date_label_top {
+         fill: #8FA2AC;
+         text-anchor: middle;
+         font-family: Baloo Thambi;
+       }
+    
+       .date_label_bottom {
+         fill: #8FA2AC;
+         text-anchor: middle;
+         font-family: Baloo Thambi;
+       }
+    
+       .circle_legend {
+         fill: none;
+       }
+       
+       .circle_text {
+         fill: #8FA2AC;
+         font-family: Baloo Thambi;                   
+       }
+    
+       .tooltip {
+         border-radius: 10px;
+         padding: 10px;
+         position: absolute;
+         color: #FFF;
+         background-color: #222;
+         opacity: .9;
+         z-index: 1;
+         font-family: Baloo Thambi;
+       }
+       
+       .irs--round .irs-line {
+          top: 36px;
+          height: 4px;
+          background-color: #E3E9ED;
+          border-radius: 4px;
+       }
+       .irs--round .irs-bar {
+          top: 36px;
+          height: 4px;
+          background-color: #005b96;
+       }
+       .irs--round .irs-handle {
+          top: 26px;
+          width: 24px;
+          height: 24px;
+          border: 4px solid #005b96;
+          background-color: white;
+          border-radius: 24px;
+          box-shadow: 0 1px 3px rgba(0, 0, 255, 0.3);
+       }
+       .irs--round .irs-handle.state_hover,
+       .irs--round .irs-handle:hover {
+         background-color: #b3cde0;
+       }
+       .irs--square .irs-min,
+       .irs--square .irs-max {
+         color: #333;
+         font-family: Baloo Thambi;
+         font-size: 14px;
+         line-height: 1;
+         top: 0;
+         padding: 3px 5px;
+         background-color: rgba(0, 0, 0, 0.1);
+       }
+       .irs--round .irs-from,
+       .irs--round .irs-to,
+       .irs--round .irs-single {
+          font-family: Baloo Thambi;
+          font-size: 14px;
+          line-height: 1;
+          text-shadow: none;
+          padding: 3px 5px;
+          background-color: #005b96;
+          color: white;
+          border-radius: 4px;
+       }
+       
+       text {
+         font-family: Baloo Thambi;
+       }
+    
+       label {
+         font-family: Baloo Thambi;
+         margin-left: 10px;
+       }
+    
+       select {
+         font-family: Baloo Thambi;
+       }
+    
+       .show_label {
+         font-family: Baloo Thambi;
+       }
+    
+       .legend_label {
+         fill: #8FA2AC;
+         text-anchor: middle;
+         font-family: Baloo Thambi;                     
+       }
+    </style>
+  </head>
+
+  <body>
+    <!-- Titles -->
+    <div id='title' style='width:1366px;'>
+      <h1 style = 'color: #005B96'>Spatial Intelligence</h1>
+      </br>
+      <h2 style = 'color: #005B96; font-size: 18px'>The following graph helps you understand the customer visited the shopping mall in Feb 2021.</h2>
+      <h2 style = 'color: #005B96; font-size: 18px'>Bubble Size represents the number of current cusomer type entering the store. Percentage = number / total entering number.  (Visual legends are in progress) </h2>
+      </br>
+      <h2 style = 'color: #005B96; font-size:20px'>CLICK the bubble if you would like to keep its trend path stay on the screen for comparison. Click again to remove it. </h2>
+
+      </br>
+    </div>
+
+    <!-- A div contaimer for the customer type selector dropdown menu -->
+    <div id='toolbar'></div>
+
+    <!-- A div container for the range
+    , allowing users to control the time period displayed-->
+    <label>Time Range</label>
+    <div id='slider-container' style='width:1366px; height:50px;'>
+      <!-- A place holder input. This will be overwritten by the range slider when we create it, but it needs an id to hang the slider onto -->
+      <input type='text' id='slider' name='slider' value=''></input>
+    </div>
+
+
+
+    <!-- A div container for the main visualization -->
+    <div id='vis' style='width:1366px;'>
+      <svg class='chart-outer'><g class='chart'></g></svg>
+    </div>
+
+    <div id='legend' style='width:1366px;'> </div>
+    
+    <!-- visualization -->
+    <script src="/static/js/viz.js"></script>
+
+    <button type="button" id = "clear_button" onclick = "draw(data,vis_width,vis_height,params)" style='position:absolute; left: 1220px'>Clear All Selection</button>
+  </body>
+
+
+</html>
+
+<!-- <div class='form-group'>
+  <label for='franchise-var'>Label of Customer:</label>
+  <select class='form-control' id='franchise-var'>
+    <option value = "All" selected>All</option>
+  </select>
+</div> -->
