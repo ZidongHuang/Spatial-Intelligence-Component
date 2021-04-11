@@ -2,11 +2,15 @@
 //newest version with: dynamic scaling, single tooltip, complete dropdown, chained tooltip, click to stay
 //pending: vertical zoom
 var data = JSON.parse(document.getElementById('data').innerHTML);
-var vis_width = 1366; // outer width
+var vis_width = 1500; // outer width
 var vis_height = 650; // outer height
 var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
-var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 9};
+var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 7};
+//var type= (['accessories', 'consumer_electronics','fashions', 'kids_babies','facilities', 'jewelry', 'food'])
 var floor_color = {B1: 1, B2: 2, L1: 3, L2: 4, L3: 5, L4: 6, L5: 7, L6: 8}
+var myColor= d3.scaleOrdinal()
+//.domain(type)
+.range(['#AAB6F8', '#FAA7B8', '#2C6975', '#CDE0C9', '#94B447', '#F9AD6A', '#F9E07F'])
 
 draw = function(data, vis_width, vis_height, params) {
     // var zoom = d3.zoom()
@@ -17,7 +21,7 @@ draw = function(data, vis_width, vis_height, params) {
     //   container.attr("transform", currentTransform);
     // }
 
-    var margin = {top: 30, right: 50, bottom: 30, left: 50};
+    var margin = {top: 60, right: 100, bottom: 60, left: 100};
     var width = vis_width - margin.left - margin.right, // inner width
         height = vis_height - margin.top - margin.bottom; // inner height
 
@@ -62,7 +66,7 @@ draw = function(data, vis_width, vis_height, params) {
                         .domain([_.min(data.map(function(d) { return d[params['num']];})),
                                  _.max(data.map(function(d) { return d[params['num']];}))]);
 
-    // A line generator function. We'll use this later to draw the curves connected movies belonging to the same franchise
+    // A line generator function. We'll use this later to draw the curves connected bubbles belonging to the same store
     var line = d3.line()
                  .x(function(d) { return xScale(new Date(d['date'])); })
                  .y(function(d) { return yScale(d[params['rate']]); })
@@ -180,10 +184,11 @@ draw = function(data, vis_width, vis_height, params) {
                   .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
                   .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
                   .style('stroke-width', 0)
-                  .style('fill', d => d3.schemeTableau10[type_color[d.type]])
-                  .style('fill-opacity', 0.5)
+                  .style('fill',  function(d) { return myColor(d.type) })
+                  .style('fill-opacity', 0.7)
                   .on('mouseover', function(d,i){
                        //console.log(d)
+                   
                        d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
                        d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
                        d3.select(this).moveToFront(); //bring to front;
@@ -200,7 +205,9 @@ draw = function(data, vis_width, vis_height, params) {
                          .text((d,index) => {
                              return d[params['rate']] + "%"
                        })
-                         .attr('opacity', 0.7)
+                         .attr('opacity', 0.6)
+                         .style('font-size', 12)
+                         
 
                   })
                   .on('mouseout', function(d,i){
@@ -242,13 +249,48 @@ var hideDetails = function() {
       });
 };
 
+
+// var legend_color = [{color: '#FAA7B8', text : 'fashion'},
+//                     {color: '#AAB6F8', text : 'accessories'},
+//                     {color:'#2C6975', text: 'food'},
+//                     {color:'#CDE0C9', text: 'consumer_electronics'},
+//                     {color:'#94B447', text: 'jewelry'},
+//                     {color:'#F9AD6A', text: 'kids_babies'},
+//                     {color:'#F9E07F', text: 'facilities'}];
+
+// var legendHolder = svg.append('g')
+//   // translate the holder to the right side of the graph
+//   .attr('transform', "translate(" + ( -width) + "," + ( -margin.bottom) + ")")
+//   .attr('class','legendHolder')
+
+//   var legend = legendHolder.selectAll(".legend")
+//                 .data(legend_color.slice())
+//                 .enter().append("g")
+//                 .attr("class", "legend")
+
+//   legend.append("rect")
+//       .attr("x", function(d,i){return (width +(150*i))})
+//       .attr("width", 10)
+//       .attr("height", 10)
+//       .style("text-anchor", "end")
+//       .style("fill", function(d) { return d['color']; });
+
+//   legend.append("text")
+//       //.attr("x", width - 24)
+//       .attr("x", function(d,i){return (width +(140*i))})
+//       .attr("y", 5)
+//       .attr("dy", ".35em")
+//       //.style("text-anchor", "end")
+//       .text(function(d) { return d['text']; });
+
+
 // Create the range slider
 var createSlider = function(data, params) {
 
   // Set the width and left offset of the slider, such that it aligns with the start and end of our X scale
   $('#slider-container')
-      .width(1266 + 20) // = vis_width - left.margin - right.margin (+ 20px to align the slider handles)
-      .offset({left: 50 - 10}); // = left.margin (- 10px to align the slider handles)
+      .width(1300 + 20) // = vis_width - left.margin - right.margin (+ 20px to align the slider handles)
+      .offset({left: 100 - 10}); // = left.margin (- 10px to align the slider handles)
 
   // Create a new range slider
   // See http://ionden.com/a/plugins/ion.rangeSlider/index.html for documentation
@@ -263,7 +305,7 @@ var createSlider = function(data, params) {
     prefix: '2021-2-',
     // When we move the slider we want to
     // * redraw the chart for the selected date range
-    // * any highlighted franchises should stay the highlighted ('All' or a specific franchise selected from the dropdown menu)
+    // * any highlighted customer label should stay the highlighted ('All' or a specific label selected from the dropdown menu)
     onChange: function(newRange){
         // Before redrawing the chart, we need to remove its current contents
         d3.selectAll('text').remove()
@@ -281,13 +323,13 @@ var createSlider = function(data, params) {
   });
 }
 
-// Create a dropdown menu allowing users to select a specific franchise or return to the default view ('All')
+// Create a dropdown menu allowing users to select a specific customer label or return to the default view ('All')
 var createToolbar = function(data, params) {
-  // an array of the franchise names in the input data
-  var franchises = d3.set(data.map(function(d) { return d['dropdown'];})).values();
-  franchises.pop();
-  // create pickers for both the franchise title
-  var dimensions = ['franchise'];
+  // an array of the customer Label names in the input data
+  var customerLabel = d3.set(data.map(function(d) { return d['dropdown'];})).values();
+  customerLabel.pop();
+  // create pickers for both the customer label title
+  var dimensions = ['label'];
   var toolbar_labels = ['Label of Customer']; // This will be displayed to the left of the dropdown menu
 
   // We don't need a for-loop here, since we're only adding a single dropdown menu,
@@ -299,10 +341,10 @@ var createToolbar = function(data, params) {
 
     // create the <select></select> dropdown menu
     $('#toolbar').append("<div class='form-group'><label for='"+dim+"-var'>"+label+":</label><select class='form-control' id='"+dim+"-var' value='youth_rate'></select></div>")
-    // populate the dropdown with the movie franchise options (<option></option>)
-    for(i_franchise in franchises) {
-      franchise_name = franchises[i_franchise];
-      $('#'+dim+'-var').append("<option value='"+franchise_name+"'>"+franchise_name+"</option>");
+    // populate the dropdown with the customer label options (<option></option>)
+    for(i_label in customerLabel) {
+      label_name = customerLabel[i_label];
+      $('#'+dim+'-var').append("<option value='"+label_name+"'>"+label_name+"</option>");
     }
     // set picker to saved param values
     $('#'+dim+'-var').val(params['rate']);
@@ -313,13 +355,13 @@ var createToolbar = function(data, params) {
         var newVar = $('#'+dim+'-var').val();
         params[dim+'axis'] = newVar;
         params[dim+'axislabel'] = newVar;
-        params['num'] = $("#franchise-var").val().replace("rate", "number");
-        params['rate'] = $("#franchise-var").val();
+        params['num'] = $("#label-var").val().replace("rate", "number");
+        params['rate'] = $("#label-var").val();
         console.log(params['num'],params['rate'])
 
-        // The order of operation matters here. If 'All' franchises are selected,
+        // The order of operation matters here. If 'female_rate' is selected,
         // we want to return to the default view.
-        // If a specific franchise is selected, we want to highlight only that franchise.
+        // If a specific label is selected, we want to display only that label.
 
         // d3.selectAll('.line_highlight')
         //     .style('opacity', function() {return newVar === 'All' ? 0.7 : 0;})
@@ -331,7 +373,7 @@ var createToolbar = function(data, params) {
         // d3.selectAll('.curve')
         //   .style('opacity', 0)
 
-        var this_index = franchises.indexOf(newVar)
+        var this_index = customerLabel.indexOf(newVar)
 
         draw(data,vis_width,vis_height,params);
       }
