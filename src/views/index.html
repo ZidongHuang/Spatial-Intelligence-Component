@@ -22,19 +22,7 @@
     <!-- Load the default stylesheet (CSS) for the slider -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
     <!-- CSS style section -->
-    <link rel="stlyesheet" href="/static/css/style.css">
-
-    <!-- data -->
-    <script type='application/json' id='data'></script>
-    <script type='text/javascript'>
-      $.getJSON( "/static/data/data.json", function( data ) {
-       
-        document.getElementById("data").innerHTML = JSON.stringify(data)
-      });
-    </script>
-
-    <!-- visualization -->
-    <script src="/static/js/viz.js"></script>
+    <link rel="stlyesheet" type='text/css' href="/static/public/css/main.css"/>
   </head>
 
   <body>
@@ -69,6 +57,10 @@
     </div>
 
     <div id='legend' style='width:1366px;'> </div>
+    
+    <!-- visualization -->
+    <script src="/static/js/viz.js"></script>
+
     <button type="button" id = "clear_button" onclick = "draw(data,vis_width,vis_height,params)" style='position:absolute; left: 1220px'>Clear All Selection</button>
   </body>
 

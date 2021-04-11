@@ -1,18 +1,19 @@
 //flag = 7/4 Wed afternoon
 //newest version with: dynamic scaling, single tooltip, complete dropdown, chained tooltip, click to stay
 //pending: vertical zoom
-console.log('begin------------------------------------------')
 
-var data = document.getElementById('data');
+//Get data
+var data;
+$.ajax({
+  url: '/static/data/data.json',
+  async: false,
+  dataType: 'json',
+  success: function (json) {
+    data = json;
+  }
+});
 
-// global dataList=[];
-// $.getJSON( "/static/data/data.json", function( d ) {
-//   // console.log(d)
-//   dataList.push(d)
-//   }
-// );
 
-console.log(data.innerText)
 var vis_width = 1366; // outer width
 var vis_height = 650; // outer height
 var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
@@ -163,13 +164,12 @@ draw = function(data, vis_width, vis_height, params) {
     };
 
     // Then add the bubbles to the chart (one for each store in each eay)
-
     for (i = 0; i < storeName.length; i++) {
       var storeName_filt = storeName[i];
       var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
       let clicked = false;
 
-      //console.log(data_filt)
+      // console.log(data_filt)
       container_bubble = svg.append('g')
                      .attr('class', "groupCircle_" + storeName_filt)
 
