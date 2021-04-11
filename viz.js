@@ -1,26 +1,35 @@
-
+//flag = 7/4 Wed afternoon
+//newest version with: dynamic scaling, single tooltip, complete dropdown, chained tooltip, click to stay
+//pending: vertical zoom
 var data = JSON.parse(document.getElementById('data').innerHTML);
 var vis_width = 1366; // outer width
 var vis_height = 650; // outer height
 var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
-var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 7};
+var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 9};
 var floor_color = {B1: 1, B2: 2, L1: 3, L2: 4, L3: 5, L4: 6, L5: 7, L6: 8}
 
-
 draw = function(data, vis_width, vis_height, params) {
-    // Define margins between the outer chart and the inner chart (the actual plotting area)
-    // This creates space for axes, labels and tooltips
+    // var zoom = d3.zoom()
+    //              .scaleExtent([1,10])
+    //              .on("zoom", zoomed);
+    // function zoomed() {
+    //   const currentTransform = d3.event.transform;
+    //   container.attr("transform", currentTransform);
+    // }
+
     var margin = {top: 30, right: 50, bottom: 30, left: 50};
     var width = vis_width - margin.left - margin.right, // inner width
         height = vis_height - margin.top - margin.bottom; // inner height
 
-    //remove the older canvas
-    d3.select('.chart-outer').remove()
+    //remove the older canvas when redraw
+    d3.select('.chart-outer')
+      .remove()
+
     d3.select('#vis')
       .append('svg')
       .attr('class','chart-outer')
       .append('g')
-      .attr('class','chart')
+      .attr('class','chart');
 
     // Set the dimensions of the outer chart
     d3.select('.chart-outer')
@@ -29,27 +38,29 @@ draw = function(data, vis_width, vis_height, params) {
 
     // Translate the inner chart to the left and down to create margins.
     // Any new object that we append to 'g' will automatically inherit these translations
-    var svg = d3.select('.chart').append('svg')
-          .attr('width', vis_width)
-          .attr('height', vis_height)
-        .append('g')
-          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    var svg = d3.select('.chart')
+                .append('svg')
+                .attr('width', vis_width)
+                .attr('height', vis_height)
+                .append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var xScale = d3.scaleTime()
-            // The data range will come from the slider
-            .domain([new Date(params['min_date']),new Date(params['max_date'])])
-            .range([0, width])
+    var xScale = d3.scaleTime()// The data range will come from the slider
+                   .domain([new Date(params['min_date']),new Date(params['max_date'])])
+                   .range([0, width])
 
     var yScale = d3.scaleLinear()
-      .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
-      .range([height, 0]);
+                   .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
+                   .range([height, 0]);
+
+    var yScaleStatic = d3.scaleLinear()
+                         .domain([0, 100])
+                         .range([height, 0]);
 
     var bubbleScale = d3.scaleLinear()
-        // This controls the minimum and maximum size of the bubbles
-        .range([10,1000])
-        // The '_.' indicates an Underscore function. Here we use it to extract a column from the JSON table and calulate the min and max
-        .domain([_.min(data.map(function(d) { return d[params['num']];})),
-                 _.max(data.map(function(d) { return d[params['num']];}))]);
+                        .range([10,1000])
+                        .domain([_.min(data.map(function(d) { return d[params['num']];})),
+                                 _.max(data.map(function(d) { return d[params['num']];}))]);
 
     // A line generator function. We'll use this later to draw the curves connected movies belonging to the same franchise
     var line = d3.line()
@@ -68,11 +79,11 @@ draw = function(data, vis_width, vis_height, params) {
 
     // Add a title to the Y axis
     svg.append("text")
-          .attr("class", "axis_title")
-          .attr("text-anchor", "middle") // Anchor the text to its center. This is the point we will translate and rotate about
-                                         // Translate and rotate the axis title to get it in the right position
-          .attr("transform", "translate("+ (width + 50) + "," + (height/2) + ") rotate(-90)")
-          .text("Customer Percentage");
+       .attr("class", "axis_title")
+       .attr("text-anchor", "middle") // Anchor the text to its center. This is the point we will translate and rotate about
+                                     // Translate and rotate the axis title to get it in the right position
+       .attr("transform", "translate("+ (width + 50) + "," + (height/2) + ") rotate(-90)")
+       .text("Customer Percentage");
 
     // Define a table of day. We'll add a vertical marker line at each of these days.
     var date_labels = [{date: '2021-2-1'},
@@ -92,123 +103,144 @@ draw = function(data, vis_width, vis_height, params) {
         .enter()
         .append('line')
         .attr('class', 'date_marker')
-        .attr('y1', yScale(0))
+        .attr('y1', yScaleStatic(0))
         .attr('x1', function(d) {return xScale(new Date(d['date'] ));})
         .attr('x2', function(d) {return xScale(new Date(d['date'] ));})
-        .attr('y2', yScale(100))
+        .attr('y2', yScaleStatic(100))
         .style('stroke', '#E3E9ED')
 
     // Add a label at the top of the date markers
     svg.selectAll('.date_label_top')
         .data(date_labels)
-      .enter().append('text')
+        .enter()
+        .append('text')
         .attr('class', 'date_label_top')
         .attr('x', function(d) {return xScale(new Date(d['date'] ));})
-        .attr('y', yScale(100) - 10)
+        .attr('y', yScaleStatic(100) - 10)
         .text(function(d) {return d['date'].slice(5,10)})
 
     // Add a label at the bottom of the date markers
     svg.selectAll('.date_label_bottom')
         .data(date_labels)
-      .enter().append('text')
+        .enter()
+        .append('text')
         .attr('class', 'date_label_bottom')
         .attr('x', function(d) {return xScale(new Date(d['date'] ));})
-        .attr('y', yScale(0) + 20)
+        .attr('y', yScaleStatic(0) + 20)
         .text(function(d) {return d['date'].slice(5,10)})
 
     // Add the curves to the chart (one for each specific store). Draw curves first to be underneath bubbles
     var storeName = d3.set(data.map(function(d) { return d['store_name'];})).values();
 
     for (var i = 0; i < storeName.length; i++) {
-        var storeName_filt = storeName[i];
-        var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
-            data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
+      var storeName_filt = storeName[i];
+      var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
+          data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
 
-        svg.append('path')
-            .datum(data_filt)
-            //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
-            .attr('class', "curve_" + storeName_filt)
-            .attr('d', line) // call the line generator function defined earlier
-            .style('fill', 'none')
-            .style('stroke', d => d3.schemeTableau10[type_color[d[0].type]])
-            .style('stroke-width', 2)
-            .style('stroke-opacity', 0)
+      container_path = svg.append('g')
+                          .attr('class', "groupPath_" + storeName_filt)
+
+      path = container_path.append('path')
+                          .datum(data_filt)
+                          //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
+                          .attr('class', "curve_" + storeName_filt)
+                          .attr('d', line) // call the line generator function defined earlier
+                          .style('fill', 'none')
+                          .style('stroke', d => d3.schemeTableau10[type_color[d[0].type]])
+                          .style('stroke-width', 2)
+                          .style('stroke-opacity', 0)
     };
 
     // Then add the bubbles to the chart (one for each store in each eay)
+
     for (i = 0; i < storeName.length; i++) {
-        var storeName_filt = storeName[i];
-        var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
-        svg.selectAll('.circle_' + i)
-          .data(data_filt)
-          .enter()
-          .append('circle')
-          .attr('class', d => d['store_name'])
-          .attr('cx', function(d) { return xScale(new Date(d['date']));})
-          .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
-          .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
-          .style('stroke-width', 0)
-          .style('fill', d => d3.schemeTableau10[type_color[d.type]])
-          .style('fill-opacity', 0.5)
-          .on('mouseover', function(d,i){
-              //  console.log("bubble_" + d['store_name'])
-               d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
-               d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
-               d3.select(this)
-                 .moveToFront(); //bring to front;
-               d3.selectAll('.show_label')
-                 .style('opacity', 0)
+      var storeName_filt = storeName[i];
+      var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
+      let clicked = false;
 
-                  var label = d['store_name'] + '<br/>' +
-                              'Type: ' + d['type'] + '<br/>' +
-                              'Floor: ' + d['floor'] + '<br/>' +
-                              'Enter Rate: ' + d['enter_rate'] + '%' + '<br/>' +
-                              'Enter Count: ' + d['enter_number'] + '<br/>';
-             return showDetails(label,this)
-          })
+      //console.log(data_filt)
+      container_bubble = svg.append('g')
+                     .attr('class', "groupCircle_" + storeName_filt)
 
-          .on('mouseout', function(d,i){
-              d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
-              d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
-              return hideDetails();})
-        }
+      text = container_bubble.selectAll("text")
+                .data(data_filt)
+                .enter()
+                .append('text')
+                .attr('text-anchor', 'middle')
+                .attr('class', d => "text_" + d["store_name"])
+                .attr('x', function(d) { return xScale(new Date(d['date']));})
+                .attr('y', function(d) { return yScale(parseFloat(d[params['rate']])) + 20 + Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
+
+      bubble = container_bubble.selectAll('circle')
+                  .data(data_filt)
+                  .enter()
+                  .append('circle')
+                  .attr('class', d => d['store_name'])
+                  .attr('cx', function(d) { return xScale(new Date(d['date']));})
+                  .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
+                  .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
+                  .style('stroke-width', 0)
+                  .style('fill', d => d3.schemeTableau10[type_color[d.type]])
+                  .style('fill-opacity', 0.5)
+                  .on('mouseover', function(d,i){
+                       //console.log(d)
+                       d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 1);
+                       d3.selectAll("." + d['store_name']).style("fill-opacity", 1);
+                       d3.select(this).moveToFront(); //bring to front;
+                       // d3.selectAll('.show_label')
+                       //   .style('opacity', 0)
+                       var label = 'Store name: ' + d['store_name'] + '<br/>' +
+                                    'Business type: ' + d['type'] + '<br/>' +
+                                    //'Floor: ' + d['floor'] + '<br/>' +
+                                    'Number of ' + params['num'].split('_')[0] + ': ' + d[params['num']] + '<br/>' +
+                                    'Percentage of '+ params['num'].split('_')[0] + ': ' + d[params['rate']] + '%' + '<br/>' ;
+                       showDetails(label,this);
+
+                       d3.selectAll(".text_" + d["store_name"])
+                         .text((d,index) => {
+                             return d[params['rate']] + "%"
+                       })
+                         .attr('opacity', 0.7)
+
+                  })
+                  .on('mouseout', function(d,i){
+                    if(clicked === false){
+                      d3.selectAll(".curve_" + d['store_name']).style("stroke-opacity", 0);
+                      d3.selectAll(".text_" + d["store_name"]).text('');
+                      d3.selectAll("." + d['store_name']).style("fill-opacity", 0.5);
+                      }
+                      hideDetails();
+                    })
+                  .on('click', (d,i) => {
+                    clicked = !clicked;
+
+                  })
+      }
 }
 
-// Display a tooltip message, above and to the right of the selected object
-  // Here element serves as selector of the bubble that we hovered over
-  var showDetails = function(data, element) {
-    pos = $(element).position();
-    $('#chart-tooltip').html(data);
-    width = $('#chart-tooltip').width();
-    height = $('#chart-tooltip').height();
-    // display the tooltip above and to the right of the selected object
-    $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px');
-    $('#chart-tooltip').show();
 
-    // display percent for every data point
-    const class_name = data.split('<br/>')[0]
-    const percent = data.split('<br/>')[3].split(':').pop()
-    d3.selectAll(`.${class_name}`)
-      .append('text')
-      .attr('x',this.cx)
-      .attr('y',this.cy)
-      .attr('fill', '#ccc')
-      .attr('font-family', 'Helvetica Neue, Arial')
-      .attr('font-weight', 500)
-      .attr('font-size', 80)
-      .text(percent)
-  };
+var showDetails = function(data, element) {
+  pos = $(element).position()
+  $('#chart-tooltip').html(data)
+  width = $('#chart-tooltip').width()
+  height = $('#chart-tooltip').height()
+  // display the tooltip above and to the right of the selected object
+  $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px')
+  $('#chart-tooltip').show()
+  //console.log(element.className['baseVal']);
+};
+
   // Hide the tooltip whenever we move the mouse back out of a bubble
-  var hideDetails = function() {
+var hideDetails = function() {
     $('#chart-tooltip').hide()
   };
-  
+
   // Helper fucntion to move objects to the front of the draw queue. This means no other objects will overlap with it.
-  d3.selection.prototype.moveToFront = function() {  
+  d3.selection.prototype.moveToFront = function() {
       return this.each(function(){
       this.parentNode.appendChild(this);
       });
-  };
+};
 
 // Create the range slider
 var createSlider = function(data, params) {
@@ -249,7 +281,6 @@ var createSlider = function(data, params) {
   });
 }
 
-
 // Create a dropdown menu allowing users to select a specific franchise or return to the default view ('All')
 var createToolbar = function(data, params) {
   // an array of the franchise names in the input data
@@ -284,6 +315,7 @@ var createToolbar = function(data, params) {
         params[dim+'axislabel'] = newVar;
         params['num'] = $("#franchise-var").val().replace("rate", "number");
         params['rate'] = $("#franchise-var").val();
+        console.log(params['num'],params['rate'])
 
         // The order of operation matters here. If 'All' franchises are selected,
         // we want to return to the default view.
@@ -313,6 +345,6 @@ createToolbar(data, params);
 draw(data,vis_width,vis_height,params);
 
 // Append a div container to the #vis div containter. This container will hold our tooltips.
-$('#vis').append("<div class='tooltip' id='chart-tooltip'></div>");
 // Hide the tooltips by default, we'll display them only when the user hovers over a bubble.
+$('#vis').append("<div class='tooltip' id='chart-tooltip'></div>");
 $('#chart-tooltip').hide();
