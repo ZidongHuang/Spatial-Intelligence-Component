@@ -33,7 +33,7 @@ The dropdown is used to switch to another customer feature. This process is abou
 
 ## Development Process
 
-The generall process is: 
+At every stage we distributed the workload among ourselves. Althoug each of us was involved in almost all works, Zidong is mostly responsible for interaction, Fei for data and the framework, Zihui for design and details. Our generall process was: 
 
 1. brainstorming(4h) 
 We went through a lot of ideas. The biggest one is to animate the tracks of every customer, with specific values by the side. We tried this idea and thought this would take so much time that should be left to the final project.
@@ -42,12 +42,12 @@ We went through a lot of ideas. The biggest one is to animate the tracks of ever
 It was a back and forth process to know the exact content, form, and range of our data. We also played around the format(json, csv). 
 
 3. wireframe(4h)
+There is an existing project we refered to (source at the credit part). We spent some time reading the oringinal code and discussed how we could implement our own ideas. Then we drew some scratches to build the framework.
 
-4. Interaction(8h)
+![Scratch](https://github.com/6859-sp21/a4-spatial_intelligence-1/blob/main/data/scratch.jpg)
+
+4. Interaction(13h)
+We spent a lot of time working with slider, zooming, dropdown, hover, click, and tooltip.
 
 5. Detail(8h)
-
-There are still many details to be polished but this is the general framework we are working on. The first thing on our to-do list is to add filter option so users can choose what color represents. For example, I might be more interested in business type. Maybe I care more about which floor the brands are located. I want to know what types of customers are willing to visit the higher floor. Second, we would add more user-friendly interaction. For example, now we can only use the slider to zoom in. It would be more convenient to use the mouse wheel. Third, the necessary details, like legend, color scheme, credit and sources etc. We would love to hear your thoughts on our project, especially whether you could understand the visualization and what interesting interaction we could add. Thanks for your attention.
-
-A rationale for your design decisions. How did you choose your particular visual encodings, interaction, and animation techniques? What alternatives did you consider and how did you arrive at your ultimate choices?
-An overview of your development process. Describe how the work was split among the team members. Include a commentary on the development process, including answers to the following questions: Roughly how much time did you spend developing your application (in people-hours)? What aspects took the most time?
+The details that we polished included: clear section button; color scheme; bubble size; font; filter stores with small counts.
