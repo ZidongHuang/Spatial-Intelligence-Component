@@ -15,8 +15,8 @@ var width = vis_width - margin.left - margin.right, // inner width
     height = vis_height - margin.top - margin.bottom; // inner height
 var comparison = false;
 
-d3.select('.chart-outer')
-  .remove()
+// d3.select('.chart-outer')
+//   .remove()
 
 d3.select('#vis')
   .append('svg')
@@ -26,7 +26,7 @@ d3.select('#vis')
 
 // Set the dimensions of the outer chart
 d3.select('.chart-outer')
-  .attr('width', vis_width)
+  .attr('width', 2000)
   .attr('height', vis_height);
 
 var clip = d3.select('.chart')
@@ -43,7 +43,7 @@ var clip = d3.select('.chart')
 // Any new object that we append to 'g' will automatically inherit these translations
 var svg = d3.select('.chart')
             .append('svg')
-            .attr('width', vis_width)
+            .attr('width', 2000)
             .attr('height', vis_height)
             .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
@@ -73,22 +73,32 @@ var bubbleScale = d3.scaleLinear()
 
 // Add a Y-axis to the chart, put it on the right side of the plot
 
-var yAxis = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
+var yAxis = d3.axisLeft(yScale) // puts the tick labels to the right side of the axis
               .tickFormat(d=>d + "%")
-              .tickSize(20);
+              .tickSize(6);
+
+var yAxis2 = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
+               .tickFormat(d=>d + "%")
+               .tickSize(6);
 
 svg.append('g')
     .attr('class', 'y axis')
     .attr("id", "yaxis")
-    .attr('transform', 'translate(' + width + ',' + 0 + ')') // translates the axis to the right side of the plot
-    .call(yAxis);
+    .attr('transform', 'translate(-25, 0)') // translates the axis to the right side of the plot
+    .call(yAxis)
+
+svg.append('g')
+    .attr('class', 'y2 axis')
+    .attr("id", "yaxis2")
+    .attr('transform', 'translate(' + (width+25) + ',' + 0 + ')') // translates the axis to the right side of the plot
+    .call(yAxis2)
 
 // Add a title to the Y axis
 svg.append("text")
    .attr("class", "axis_title")
    .attr("text-anchor", "middle") // Anchor the text to its center. This is the point we will translate and rotate about
                                  // Translate and rotate the axis title to get it in the right position
-   .attr("transform", "translate("+ (width + 70) + "," + (height/2) + ") rotate(-90)")
+   .attr("transform", "translate("+ (-70) + "," + (height/2) + ") rotate(-90)")
    .text("Customer Percentage");
 
 // Define a table of day. We'll add a vertical marker line at each of these days.
@@ -162,6 +172,7 @@ for (var i = 0; i < storeName.length; i++) {
 
 // Then add the bubbles to the chart (one for each store in each eay)
 var clicked = {};
+var mousePos;
 var container_bubble = svg.append('g').attr("class", "all_bubble")
 for (i = 0; i < storeName.length; i++) {
   var storeName_filt = storeName[i];
@@ -189,7 +200,7 @@ for (i = 0; i < storeName.length; i++) {
               .attr('r', function(d) { return Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
               .style('stroke-width', 0)
               .style('fill',  function(d) { return myColor(d.type) })
-              .style('fill-opacity', 0.7)
+              .style('fill-opacity', 0.6)
               .on('mouseover', function(d,i){
                    d3.selectAll("#curve_" + d['store_name']).moveToFront();
                    d3.selectAll("#curve_" + d['store_name']).style("stroke-opacity", 1);
@@ -203,6 +214,8 @@ for (i = 0; i < storeName.length; i++) {
                                 'Percentage of '+ params['num'].split('_')[0] + ': ' + d[params['rate']] + '%' + '<br/>' ;
 
                    showDetails(label,this);
+
+                   mousePos = $(this).position()
 
                    d3.selectAll("#text_" + d["store_name"])
                      .text((d,index) => {return d[params['rate']] + "%"})
@@ -219,41 +232,71 @@ for (i = 0; i < storeName.length; i++) {
                   hideDetails();
                 })
               .on('click', (d,i) => {
-                clicked[d.store_name] = !clicked[d.store_name];
-                if (clicked[d.store_name] === true ){
 
-                    d3.selectAll('.groupCircle_text').filter(function(d,i){return clicked[d.store_name] === true})
+                clicked[d.store_name] = !clicked[d.store_name];
+
+                console.log(d.store_name + " it's click flag is " + clicked[d.store_name])
+
+                if (clicked[d.store_name] === true ){
+                    console.log("drawing " + d.store_name)
+                    d3.selectAll("#text_" + d["store_name"]).filter(function(d,i){return clicked[d.store_name] === true})
                       .clone()
                       .attr("class", "stay_text")
                       .attr("id", "stay_text_" + d['store_name'] + "_" + params['rate'])
                       .text((d,index) => {return d[params['rate']] + "%"})
                       .attr("opacity", 0);
 
-                } else{
-                  d3.selectAll("#stay_text_" + d['store_name'] + "_" + params['rate']).remove();
+                    d3.select('.chart-outer')
+                        .append('text')
+                        .attr("class", "stayGeneral")
+                        .attr("id", "stayGeneral" + "_" + d['store_name'])
+                        .attr('x', vis_width - 35)
+                        .attr('y', function(){
+                          arr = data.filter(a => a['store_name']===d['store_name'])
+                          return 70 + yScale(arr[arr.length-1][params['rate']])
+                      })
+                        .attr("text-anchor", "left")
+                        .text(params['rate'] + " of " + d['store_name'])
+                        .attr('font-size', 18)
+                        .style('fill',  function(color) { return myColor(type_color[d.type]) })
+                        .style('opacity', 1);
                 }
+                else {
+                  d3.selectAll("#stay_text_" + d['store_name'] + "_" + params['rate']).remove();
+                  d3.selectAll("#stayGeneral_" + d['store_name']).remove()
+                }
+
+
               })
-
 }
-
 
 function redraw(data, vis_width, vis_height, params) {
 
   if (comparison === false){
 
     Object.keys(clicked).forEach(key => {clicked[key] = false});
+    d3.selectAll(".stayGeneral").remove();
 
     yScale = d3.scaleLinear()
                .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
                .range([height, 0]);
 
-    yAxis = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
+    yAxis = d3.axisLeft(yScale) // puts the tick labels to the right side of the axis
               .tickFormat(d=>d + "%")
-              .tickSize(20);
+              .tickSize(6);
 
-    d3.select(".axis")
+    yAxis2 = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
+               .tickFormat(d=>d + "%")
+               .tickSize(6);
+
+    d3.select(".y")
       .transition()
       .call(yAxis);
+
+    d3.select(".y2")
+      .transition()
+      .call(yAxis2);
+
 
     d3.selectAll('.groupPath').remove()
 
@@ -279,7 +322,7 @@ function redraw(data, vis_width, vis_height, params) {
       .duration(300)
       .attr('cx', function(d) { return xScale(new Date(d['date']));})
       .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
-      .style('fill-opacity', 0.7)
+      .style('fill-opacity', 0.6)
 
     d3.selectAll('.groupCircle_text')
       .attr('x', function(d) { return xScale(new Date(d['date']));})
@@ -287,7 +330,6 @@ function redraw(data, vis_width, vis_height, params) {
       .text('')
   }
   else {
-
     d3.selectAll('.groupPath').filter(function(d,i){return clicked[d[0].store_name] === true})
       .clone()
       .attr("class", "stay_curve")
@@ -299,9 +341,8 @@ function redraw(data, vis_width, vis_height, params) {
       .attr("id", "")
       .style("fill-opacity", 1);
 
-    d3.selectAll(".stay_text").attr("opacity", 0.8);
-
-    d3.selectAll('.groupPath').remove();
+    d3.selectAll(".stay_text")
+      .attr("opacity", 0.8);
 
     Object.keys(clicked).forEach(key => {clicked[key] = false});
 
@@ -309,13 +350,15 @@ function redraw(data, vis_width, vis_height, params) {
                .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
                .range([height, 0]);
 
-    yAxis = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
+    yAxis = d3.axisLeft(yScale) // puts the tick labels to the right side of the axis
               .tickFormat(d=>d + "%")
-              .tickSize(20);
+              .tickSize(6);
 
     d3.select(".axis")
       .transition()
       .call(yAxis);
+
+    d3.selectAll('.groupPath').remove();
 
     for (var i = 0; i < storeName.length; i++) {
       var storeName_filt = storeName[i];
@@ -339,7 +382,7 @@ function redraw(data, vis_width, vis_height, params) {
       .duration(300)
       .attr('cx', function(d) { return xScale(new Date(d['date']));})
       .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
-      .style('fill-opacity', 0.7)
+      .style('fill-opacity', 0.6)
 
     d3.selectAll('.groupCircle_text')
       .attr('x', function(d) { return xScale(new Date(d['date']));})
@@ -360,7 +403,7 @@ function updateChart() {
   var new_xScale = d3.event.transform.rescaleX(xScale);
   var new_yScale = d3.event.transform.rescaleY(yScale);
 
-  yAxis.call(d3.axisRight(new_yScale));
+  yAxis.call(d3.axisLeft(new_yScale));
 }
 
 function clearView() {
@@ -374,7 +417,7 @@ function clearView() {
   d3.selectAll(".groupCircle")
     .transition()
     .duration(200)
-    .style('fill-opacity', 0.7)
+    .style('fill-opacity', 0.6)
 
   d3.selectAll('.groupCircle_text')
     .transition()
@@ -385,17 +428,16 @@ function clearView() {
   d3.selectAll(".stay_text").transition().duration(0).remove();
   d3.selectAll(".stay_curve").transition().duration(0).remove();
   d3.selectAll(".stay_bubble").transition().duration(0).remove();
+  d3.selectAll(".stayGeneral").remove();
 }
 
-function toggle(){
-
+function toggle() {
   if (comparison === true){
     clearView();
   };
 
   comparison = !comparison;
   console.log("now comparison is " + comparison)
-
 }
 
 var showDetails = function(data, element) {
@@ -450,7 +492,7 @@ var createToolbar = function(data, params) {
         params[dim+'axislabel'] = newVar;
         params['num'] = $("#label-var").val().replace("rate", "number");
         params['rate'] = $("#label-var").val();
-        console.log(params['num'],params['rate'])
+        //console.log(params['num'],params['rate'])
 
         //var this_index = customerLabel.indexOf(newVar)
         redraw(data,vis_width,vis_height,params);
