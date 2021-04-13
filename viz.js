@@ -349,10 +349,25 @@ function redraw(data, vis_width, vis_height, params) {
     yScale = d3.scaleLinear()
                .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
                .range([height, 0]);
-
+               
     yAxis = d3.axisLeft(yScale) // puts the tick labels to the right side of the axis
               .tickFormat(d=>d + "%")
               .tickSize(6);
+
+    yAxis2 = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
+               .tickFormat(d=>d + "%")
+               .tickSize(6);
+
+    d3.select(".y")
+      .transition()
+      .call(yAxis);
+
+    d3.select(".y2")
+      .transition()
+      .call(yAxis2);
+
+
+
 
     d3.select(".axis")
       .transition()
