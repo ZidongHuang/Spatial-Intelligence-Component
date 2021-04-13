@@ -168,7 +168,15 @@ for (i = 0; i < storeName.length; i++) {
   var data_filt = _.filter(data, function(element){return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;})
   clicked[storeName_filt] = false;
 
-  //console.log(data_filt)
+  text = container_bubble.selectAll()
+            .data(data_filt)
+            .enter()
+            .append('text')
+            .attr('text-anchor', 'middle')
+            .attr('id', d => "text_" + d["store_name"])
+            .attr('class', "groupCircle_text")
+            .attr('x', function(d) { return xScale(new Date(d['date']));})
+            .attr('y', function(d) { return yScale(parseFloat(d[params['rate']])) + 20 + Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
 
   bubble = container_bubble.selectAll()
               .data(data_filt)
@@ -195,11 +203,9 @@ for (i = 0; i < storeName.length; i++) {
                                 'Percentage of '+ params['num'].split('_')[0] + ': ' + d[params['rate']] + '%' + '<br/>' ;
                    //showDetails(label,this);
                    d3.selectAll("#text_" + d["store_name"])
-                     .text((d,index) => {
-                         return d[params['rate']] + "%"
-                   })
+                     .text((d,index) => {return d[params['rate']] + "%"})
                      .moveToFront()
-                     .attr('opacity', 1)
+                     .attr('opacity', 0.8)
                      .style('font-size', 12)
               })
               .on('mouseout', function(d,i){
@@ -212,81 +218,135 @@ for (i = 0; i < storeName.length; i++) {
                 })
               .on('click', (d,i) => {
                 clicked[d.store_name] = !clicked[d.store_name];
+                if (clicked[d.store_name] === true ){
+
+                    d3.selectAll('.groupCircle_text').filter(function(d,i){return clicked[d.store_name] === true})
+                      .clone()
+                      .attr("class", "stay_text")
+                      .attr("id", "stay_text_" + d['store_name'] + "_" + params['rate'])
+                      .text((d,index) => {return d[params['rate']] + "%"})
+                      .attr("opacity", 0);
+
+                } else{
+                  d3.selectAll("#stay_text_" + d['store_name'] + "_" + params['rate']).remove();
+                }
               })
 
-  text = container_bubble.selectAll()
-            .data(data_filt)
-            .enter()
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('id', d => "text_" + d["store_name"])
-            .attr('class', "groupCircle_text")
-            .attr('x', function(d) { return xScale(new Date(d['date']));})
-            .attr('y', function(d) { return yScale(parseFloat(d[params['rate']])) + 20 + Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
-  }
+}
 
 
 function redraw(data, vis_width, vis_height, params) {
 
   if (comparison === false){
-    d3.selectAll(".groupPath").remove()
-  } else {
-    d3.selectAll(".groupPath")
-      .style('stroke-opacity', function(d,i){
-        if (clicke[d.store_name] === true){
-          return 1;
-        } else{
-          return 0;
-        }
-      })
+
+    Object.keys(clicked).forEach(key => {clicked[key] = false});
+
+    yScale = d3.scaleLinear()
+               .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
+               .range([height, 0]);
+
+    yAxis = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
+              .tickFormat(d=>d + "%")
+              .tickSize(20);
+
+    d3.select(".axis")
+      .transition()
+      .call(yAxis);
+
+    d3.selectAll('.groupPath').remove()
+
+    for (var i = 0; i < storeName.length; i++) {
+      var storeName_filt = storeName[i];
+      var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
+          data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
+
+      path = container_path.append('path')
+                          .datum(data_filt)
+                          //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
+                          .attr('id', "curve_" + storeName_filt)
+                          .attr('class', "groupPath")
+                          .attr('d', line) // call the line generator function defined earlier
+                          .style('fill', 'none')
+                          .style('stroke', d => myColor(type_color[d[0].type]))
+                          .style('stroke-width', 2)
+                          .style('stroke-opacity', 0)
+    };
+
+    d3.selectAll(".groupCircle")
+      .transition()
+      .duration(300)
+      .attr('cx', function(d) { return xScale(new Date(d['date']));})
+      .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
+      .style('fill-opacity', 0.7)
+
+    d3.selectAll('.groupCircle_text')
+      .attr('x', function(d) { return xScale(new Date(d['date']));})
+      .attr('y', function(d) { return yScale(parseFloat(d[params['rate']])) + 20 + Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
+      .text('')
+  }
+  else {
+
+    d3.selectAll('.groupPath').filter(function(d,i){return clicked[d[0].store_name] === true})
+      .clone()
+      .attr("class", "stay_curve")
+      .attr("id", "");
+
+    d3.selectAll(".groupCircle").filter(function(d,i){return clicked[d.store_name] === true})
+      .clone()
+      .attr("class", "stay_bubble")
+      .attr("id", "")
+      .style("fill-opacity", 1);
+
+    d3.selectAll(".stay_text").attr("opacity", 0.8);
+
+    d3.selectAll('.groupPath').remove();
+
+    Object.keys(clicked).forEach(key => {clicked[key] = false});
+
+    yScale = d3.scaleLinear()
+               .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
+               .range([height, 0]);
+
+    yAxis = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
+              .tickFormat(d=>d + "%")
+              .tickSize(20);
+
+    d3.select(".axis")
+      .transition()
+      .call(yAxis);
+
+    for (var i = 0; i < storeName.length; i++) {
+      var storeName_filt = storeName[i];
+      var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
+          data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
+
+      path = container_path.append('path')
+                          .datum(data_filt)
+                          //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
+                          .attr('id', "curve_" + storeName_filt)
+                          .attr('class', "groupPath")
+                          .attr('d', line) // call the line generator function defined earlier
+                          .style('fill', 'none')
+                          .style('stroke', d => myColor(type_color[d[0].type]))
+                          .style('stroke-width', 2)
+                          .style('stroke-opacity', 0)
+    };
+
+    d3.selectAll(".groupCircle")
+      .transition()
+      .duration(300)
+      .attr('cx', function(d) { return xScale(new Date(d['date']));})
+      .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
+      .style('fill-opacity', 0.7)
+
+    d3.selectAll('.groupCircle_text')
+      .attr('x', function(d) { return xScale(new Date(d['date']));})
+      .attr('y', function(d) { return yScale(parseFloat(d[params['rate']])) + 20 + Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
+      .text('')
+
+
   }
 
-  Object.keys(clicked).forEach(key => {clicked[key] = false});
-
-  yScale = d3.scaleLinear()
-             .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
-             .range([height, 0]);
-
-  yAxis = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
-            .tickFormat(d=>d + "%")
-            .tickSize(20);
-
-  console.log(yScale)
-
-  d3.select(".axis")
-    .transition()
-    .call(yAxis);
-
-  d3.selectAll('.groupPath').remove()
-
-  for (var i = 0; i < storeName.length; i++) {
-    var storeName_filt = storeName[i];
-    var data_filt = _.filter(data, function(element){ return element.store_name && [element.store_name].indexOf(storeName_filt) != -1;});
-        data_filt = data_filt.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()); //sort by time
-
-    path = container_path.append('path')
-                        .datum(data_filt)
-                        //Because this is a datum, to find out if this curve needs to be highlighted we need to look in d[0]['highlight'], not d['highlight']!
-                        .attr('id', "curve_" + storeName_filt)
-                        .attr('class', "groupPath")
-                        .attr('d', line) // call the line generator function defined earlier
-                        .style('fill', 'none')
-                        .style('stroke', d => myColor(type_color[d[0].type]))
-                        .style('stroke-width', 2)
-                        .style('stroke-opacity', 0)
-  };
-
-  d3.selectAll(".groupCircle")
-    .transition()
-    .duration(300)
-    .attr('cx', function(d) { return xScale(new Date(d['date']));})
-    .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
-    .style('fill-opacity', 0.7)
-
-  d3.selectAll('.groupCircle_text')
-    .attr('x', function(d) { return xScale(new Date(d['date']));})
-    .attr('y', function(d) { return yScale(parseFloat(d[params['rate']])) + 20 + Math.sqrt((bubbleScale(parseFloat(d[params['num']])))/Math.PI);})
-    .text('')
 }
 
 var zoom = d3.zoom()
@@ -318,6 +378,21 @@ function clearView() {
     .transition()
     .duration(300)
     .text('')
+
+
+  d3.selectAll(".stay_text").transition().duration(0).remove();
+  d3.selectAll(".stay_curve").transition().duration(0).remove();
+  d3.selectAll(".stay_bubble").transition().duration(0).remove();
+}
+
+function toggle(){
+  console.log(comparison);
+  if (comparison === true){
+    clearView();
+  };
+
+  comparison = !comparison;
+
 }
 
 var showDetails = function(data, element) {

@@ -26114,14 +26114,94 @@
    .legend_label {
      fill: #8FA2AC;
      text-anchor: middle;
-     font-family: Baloo Thambi;
-   }
-
-
-
+     font-family: Baloo Thambi;}
 </style>
-</head>
 
+<style>
+/* style for toggle */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 180px;
+    height: 34px;
+  }
+
+  .switch input {display:none;}
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ca2222;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2ab934;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(55px);
+    -ms-transform: translateX(55px);
+    transform: translateX(145px);
+  }
+
+  /*------ ADDED CSS ---------*/
+  .on
+  {
+    display: none;
+  }
+
+  .on, .off
+  {
+    color: white;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+  }
+
+  input:checked+ .slider .on
+  {display: block;}
+
+  input:checked + .slider .off
+  {display: none;}
+
+  /*--------- END --------*/
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;}
+</style>
+
+
+</head>
 <body>
   <!-- Titles -->
   <div id='title' style='width:1366px;'>
@@ -26179,16 +26259,27 @@
     </svg>
 </div>
 
+  <div id = 'button' style='width:1500px;'>
+    <button type="button" id = "clear_button" onclick = "clearView();" style='position:absolute; left: 1300px; top: 260px'>Clear All Selection</button>
+
+    <label class="switch" style='position:absolute; left: 1070px; top: 255px'>
+     <input type="checkbox" id="togBtn">
+     <div class="slider round" onclick = "toggle()">
+      <!--ADDED HTML -->
+      <span class="on">Comparison On</span>
+      <span class="off">Comparison Off</span>
+      <!--END-->
+     </div>
+    </label>
+  </div>
 
   <!-- A div container for the main visualization -->
   <div id='vis' style='width:1500px;'>
     <svg class='chart-outer'><g class='chart'></g></svg>
   </div>
 
-  <div id='legend' style='width:1500px;'> </div>
-
   <script type="text/javascript" src="viz.js"></script>
-  <button type="button" id = "clear_button" onclick = "clearView();" style='position:absolute; left: 1220px'>Clear All Selection</button>
+
 </body>
 
 
