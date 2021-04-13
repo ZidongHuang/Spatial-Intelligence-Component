@@ -201,7 +201,9 @@ for (i = 0; i < storeName.length; i++) {
                                 //'Floor: ' + d['floor'] + '<br/>' +
                                 'Number of ' + params['num'].split('_')[0] + ': ' + d[params['num']] + '<br/>' +
                                 'Percentage of '+ params['num'].split('_')[0] + ': ' + d[params['rate']] + '%' + '<br/>' ;
-                   //showDetails(label,this);
+
+                   showDetails(label,this);
+
                    d3.selectAll("#text_" + d["store_name"])
                      .text((d,index) => {return d[params['rate']] + "%"})
                      .moveToFront()
@@ -214,7 +216,7 @@ for (i = 0; i < storeName.length; i++) {
                   d3.selectAll("#text_" + d["store_name"]).text('');
                   d3.selectAll("#" + d['store_name']).style("fill-opacity", 0.5);
                   }
-                  //hideDetails();
+                  hideDetails();
                 })
               .on('click', (d,i) => {
                 clicked[d.store_name] = !clicked[d.store_name];
@@ -386,22 +388,21 @@ function clearView() {
 }
 
 function toggle(){
-  console.log(comparison);
+
   if (comparison === true){
     clearView();
   };
 
   comparison = !comparison;
+  console.log("now comparison is " + comparison)
 
 }
 
 var showDetails = function(data, element) {
   pos = $(element).position()
   $('#chart-tooltip').html(data)
-  width = $('#chart-tooltip').width()
-  height = $('#chart-tooltip').height()
   // display the tooltip above and to the right of the selected object
-  $('#chart-tooltip').css('top', (pos.top-height*1.5)+'px').css('left', (pos.left-width/2.0)+'px')
+  $('#chart-tooltip').css('top', (pos.top-$('#chart-tooltip').height()*1.5)+'px').css('left', (pos.left-$('#chart-tooltip').width()/2.0)+'px');
   $('#chart-tooltip').show()
 
 };
