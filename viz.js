@@ -239,6 +239,7 @@ for (i = 0; i < storeName.length; i++) {
 
                 if (clicked[d.store_name] === true ){
                     console.log("drawing " + d.store_name)
+
                     d3.selectAll("#text_" + d["store_name"]).filter(function(d,i){return clicked[d.store_name] === true})
                       .clone()
                       .attr("class", "stay_text")
@@ -273,9 +274,11 @@ for (i = 0; i < storeName.length; i++) {
 function redraw(data, vis_width, vis_height, params) {
 
   if (comparison === false){
-
     Object.keys(clicked).forEach(key => {clicked[key] = false});
+
+    //remove clicked cloned text
     d3.selectAll(".stayGeneral").remove();
+    d3.selectAll(".stay_text").remove();
 
     yScale = d3.scaleLinear()
                .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
@@ -296,7 +299,6 @@ function redraw(data, vis_width, vis_height, params) {
     d3.select(".y2")
       .transition()
       .call(yAxis2);
-
 
     d3.selectAll('.groupPath').remove()
 
@@ -349,7 +351,7 @@ function redraw(data, vis_width, vis_height, params) {
     yScale = d3.scaleLinear()
                .domain([d3.min(data, d=>d[params['rate']]),d3.max(data, d=>d[params['rate']])])
                .range([height, 0]);
-               
+
     yAxis = d3.axisLeft(yScale) // puts the tick labels to the right side of the axis
               .tickFormat(d=>d + "%")
               .tickSize(6);
@@ -365,9 +367,6 @@ function redraw(data, vis_width, vis_height, params) {
     d3.select(".y2")
       .transition()
       .call(yAxis2);
-
-
-
 
     d3.select(".axis")
       .transition()
@@ -440,9 +439,9 @@ function clearView() {
     .text('')
 
 
-  d3.selectAll(".stay_text").transition().duration(0).remove();
-  d3.selectAll(".stay_curve").transition().duration(0).remove();
-  d3.selectAll(".stay_bubble").transition().duration(0).remove();
+  d3.selectAll(".stay_text").remove();
+  d3.selectAll(".stay_curve").remove();
+  d3.selectAll(".stay_bubble").remove();
   d3.selectAll(".stayGeneral").remove();
 }
 
@@ -507,9 +506,7 @@ var createToolbar = function(data, params) {
         params[dim+'axislabel'] = newVar;
         params['num'] = $("#label-var").val().replace("rate", "number");
         params['rate'] = $("#label-var").val();
-        //console.log(params['num'],params['rate'])
 
-        //var this_index = customerLabel.indexOf(newVar)
         redraw(data,vis_width,vis_height,params);
       }
     }(dim));
