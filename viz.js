@@ -1,7 +1,19 @@
 //flag = 7/4 Wed afternoon
 //newest version with: dynamic scaling, single tooltip, complete dropdown, chained tooltip, click to stay
 //pending: vertical zoom
-var data = JSON.parse(document.getElementById('data').innerHTML);
+
+//Get data
+var data;
+$.ajax({
+  url: 'data.json',
+  async: false,
+  dataType: 'json',
+  success: function (json) {
+    data = json;
+  }
+});
+
+
 var vis_width = 1500; // outer width
 var vis_height = 650; // outer height
 var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
