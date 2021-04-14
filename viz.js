@@ -8,7 +8,7 @@ var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max
 var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 7};
 //var type= (['accessories', 'consumer_electronics','fashions', 'kids_babies','facilities', 'jewelry', 'food'])
 var floor_color = {B1: 1, B2: 2, L1: 3, L2: 4, L3: 5, L4: 6, L5: 7, L6: 8}
-var myColor= d3.scaleOrdinal().range(['#AAB6F8', '#FAA7B8', '#2C6975', '#CDE0C9', '#94B447', '#F9AD6A', '#F9E07F'])
+var myColor= d3.scaleOrdinal().range(['#FF5851', '#F3C130', '#414A6B', '#1C1B20', '#B49A85', '#044013', '#2F5D8C'])
 
 var margin = {top: 60, right: 100, bottom: 60, left: 100};
 var width = vis_width - margin.left - margin.right, // inner width
@@ -473,6 +473,8 @@ d3.selection.prototype.moveToFront = function() {
       this.parentNode.appendChild(this);
       });
 };
+
+
 
 var createToolbar = function(data, params) {
   // an array of the customer Label names in the input data
