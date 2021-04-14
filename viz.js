@@ -14,8 +14,8 @@ $.ajax({
 });
 
 
-var vis_width = 1500; // outer width
-var vis_height = 650; // outer height
+var vis_width = window.innerWidth *0.85; // outer width
+var vis_height = window.innerHeight * 0.85; // outer height
 var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
 var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, jewelry: 5, food: 6};
 //var type= (['accessories', 'consumer_electronics','fashions', 'kids_babies','facilities', 'jewelry', 'food'])
