@@ -365,11 +365,11 @@ function redraw(data, vis_width, vis_height, params) {
                .range([height, 0]);
 
     yAxis = d3.axisLeft(yScale) // puts the tick labels to the right side of the axis
-              .tickFormat(d=>d + "%")
+              .tickFormat(formatPercent)
               .tickSize(6);
 
     yAxis2 = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
-               .tickFormat(d=>d + "%")
+               .tickFormat(formatPercent)
                .tickSize(6);
 
     d3.select(".y")
