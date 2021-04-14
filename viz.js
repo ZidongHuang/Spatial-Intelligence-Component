@@ -17,7 +17,7 @@ $.ajax({
 var vis_width = 1500; // outer width
 var vis_height = 650; // outer height
 var params = {num:'female_number', rate:'female_rate', min_date: "2021-2-1", max_date: "2021-2-28"}; // parameters to customize the chart
-var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, facilities: 5, jewelry: 6, food: 7};
+var type_color = {accessories: 1, consumer_electronics: 2, fashions: 3, kids_babies: 4, jewelry: 5, food: 6};
 //var type= (['accessories', 'consumer_electronics','fashions', 'kids_babies','facilities', 'jewelry', 'food'])
 var floor_color = {B1: 1, B2: 2, L1: 3, L2: 4, L3: 5, L4: 6, L5: 7, L6: 8}
 var myColor= d3.scaleOrdinal().range(['#AAB6F8', '#FAA7B8', '#2C6975', '#CDE0C9', '#94B447', '#F9AD6A', '#F9E07F'])
@@ -84,13 +84,13 @@ var bubbleScale = d3.scaleLinear()
 // A line generator function. We'll use this later to draw the curves connected bubbles belonging to the same store
 
 // Add a Y-axis to the chart, put it on the right side of the plot
-
+var formatPercent = d3.format(".0%")
 var yAxis = d3.axisLeft(yScale) // puts the tick labels to the right side of the axis
-              .tickFormat(d=>d + "%")
+              .tickFormat(formatPercent)
               .tickSize(6);
 
 var yAxis2 = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
-               .tickFormat(d=>d + "%")
+               .tickFormat(formatPercent)
                .tickSize(6);
 
 svg.append('g')
@@ -222,15 +222,15 @@ for (i = 0; i < storeName.length; i++) {
                    var label = 'Store name: ' + d['store_name'] + '<br/>' +
                                 'Business type: ' + d['type'] + '<br/>' +
                                 //'Floor: ' + d['floor'] + '<br/>' +
-                                'Number of ' + params['num'].split('_')[0] + ': ' + d[params['num']] + '<br/>' +
-                                'Percentage of '+ params['num'].split('_')[0] + ': ' + d[params['rate']] + '%' + '<br/>' ;
+                                'Number of ' + params['num'].split('_')[0] + ': ' + parseInt(d[params['num']]) + '<br/>' +
+                                'Percentage of '+ params['num'].split('_')[0] + ': ' + (d[params['rate']]*100).toFixed(2) + '%'  + '<br/>' ;
 
                    showDetails(label,this);
 
                    mousePos = $(this).position()
 
                    d3.selectAll("#text_" + d["store_name"])
-                     .text((d,index) => {return d[params['rate']] + "%"})
+                     .text((d,index) => {return (d[params['rate']]*100).toFixed(2)  + "%"})
                      .moveToFront()
                      .attr('opacity', 0.8)
                      .style('font-size', 12)
@@ -256,7 +256,7 @@ for (i = 0; i < storeName.length; i++) {
                       .clone()
                       .attr("class", "stay_text")
                       .attr("id", "stay_text_" + d['store_name'] + "_" + params['rate'])
-                      .text((d,index) => {return d[params['rate']] + "%"})
+                      .text((d,index) => {return (d[params['rate']]*100).toFixed(2) + "%"})
                       .attr("opacity", 0);
 
                     d3.select('.chart-outer')
@@ -297,11 +297,11 @@ function redraw(data, vis_width, vis_height, params) {
                .range([height, 0]);
 
     yAxis = d3.axisLeft(yScale) // puts the tick labels to the right side of the axis
-              .tickFormat(d=>d + "%")
+              .tickFormat(formatPercent)
               .tickSize(6);
 
     yAxis2 = d3.axisRight(yScale) // puts the tick labels to the right side of the axis
-               .tickFormat(d=>d + "%")
+               .tickFormat(formatPercent)
                .tickSize(6);
 
     d3.select(".y")
