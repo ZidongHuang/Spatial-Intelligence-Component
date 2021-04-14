@@ -22,9 +22,11 @@
 <!-- Load the default stylesheet (CSS) for the slider -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
 <link rel="stylesheet" href="main.css"/>
+<link rel="stylesheet" href="toggle.css"/>
 
 
 </head>
+
 
 <body>
   <!-- Titles -->
@@ -42,25 +44,72 @@
   <!-- A div contaimer for the customer type selector dropdown menu -->
   <div id='toolbar'></div>
 
-  <!-- A div container for the range
-  , allowing users to control the time period displayed-->
-  <label>Time Range</label>
-  <div id='slider-container' style='width:1366px; height:50px;'>
-    <!-- A place holder input. This will be overwritten by the range slider when we create it, but it needs an id to hang the slider onto -->
-    <input type='text' id='slider' name='slider' value=''></input>
+
+
+  <div id= 'legend'>
+    <svg id ='legend_type_color' width = '1500' height = '30'>
+      <g class = 'legendgroup' id = 'legend_type_color' text-anchor = 'start'
+      font-family = 'sans-serif' font-size = '15'
+      transform = 'translate (70,0)' >
+      <g transform = 'translate (-70,0)'>
+        <text dominant-baseline = 'central' x= '25' y= '10'>Type:</text>
+      </g>
+      <g transform = 'translate (20,0)'>
+        <rect width = '15' height ='15' fill ='#FAA7B8'></rect>
+        <text dominant-baseline = 'central' x= '35' y= '10'>fashion</text>
+        </g>
+      <g transform = 'translate (140,0)'>
+        <rect width = '15' height ='15' fill ='#AAB6F8'></rect>
+        <text dominant-baseline = 'central' x= '25' y= '10'>accessories</text>
+        </g>
+      <g transform = 'translate (260,0)'>
+          <rect width = '15' height ='15' fill ='#2C6975'></rect>
+          <text dominant-baseline = 'central' x= '45' y= '10'>food</text>
+          </g>
+      <g transform = 'translate (380,0)'>
+          <rect width = '15' height ='15' fill ='#94B447'></rect>
+          <text dominant-baseline = 'central' x= '35' y= '10'>jewelry</text>
+          </g>
+      <g transform = 'translate (500,0)'>
+            <rect width = '15' height ='15' fill ='#F9AD6A'></rect>
+            <text dominant-baseline = 'central' x= '25' y= '10'>kids_babies</text>
+            </g>
+      <g transform = 'translate (620,0)'>
+              <rect width = '15' height ='15' fill ='#F9E07F'></rect>
+              <text dominant-baseline = 'central' x= '35' y= '10'>facilities</text>
+              </g>
+      <g transform = 'translate (740,0)'>
+              <rect width = '15' height ='15' fill ='#CDE0C9'></rect>
+              <text dominant-baseline = 'central' x= '25' y= '10'>consumer_electronics</text>
+              </g>
+       </g>
+    </svg>
+</div>
+
+  <div id = 'button' style='width:1500px;'>
+    <button type="button" id = "clear_button" onclick = "clearView();" style='position:absolute; left: 1300px; top: 260px'>Clear All Selection</button>
+
+    <label class="switch" style='position:absolute; left: 1070px; top: 255px'>
+     <input type="checkbox" id="togBtn">
+     <div class="slider round" onclick = "toggle()">
+      <!--ADDED HTML -->
+      <span class="on">Comparison On</span>
+      <span class="off">Comparison Off</span>
+      <!--END-->
+     </div>
+    </label>
   </div>
 
 
 
   <!-- A div container for the main visualization -->
-  <div id='vis' style='width:1366px;'>
+  <div id='vis' style='width:1500px;'>
     <svg class='chart-outer'><g class='chart'></g></svg>
   </div>
 
   <div id='legend' style='width:1366px;'> </div>
 
   <script type="text/javascript" src="viz.js"></script>
-  <button type="button" id = "clear_button" onclick = "draw(data,vis_width,vis_height,params)" style='position:absolute; left: 1220px'>Clear All Selection</button>
 </body>
 
 
