@@ -60,8 +60,8 @@
     transform: translate(-50%,-50%);
     top: 50%;
     left: 50%;
-    font-size: 14px;
-    font-family: Tekton Pro, sans-serif;
+    font-size: 12px;
+    font-family: Tekton Pro;
   }
 
   input:checked+ .slider .on

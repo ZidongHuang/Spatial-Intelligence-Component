@@ -223,14 +223,14 @@ for (i = 0; i < storeName.length; i++) {
                                 'Business type: ' + d['type'] + '<br/>' +
                                 //'Floor: ' + d['floor'] + '<br/>' +
                                 'Number of ' + params['num'].split('_')[0] + ': ' + parseInt(d[params['num']]) + '<br/>' +
-                                'Percentage of '+ params['num'].split('_')[0] + ': ' + (d[params['rate']]*100).toFixed(2) + '%'  + '<br/>' ;
+                                'Percentage of '+ params['num'].split('_')[0] + ': ' + (d[params['rate']]*100).toFixed(1) + '%'  + '<br/>' ;
 
                    showDetails(label,this);
 
                    mousePos = $(this).position()
 
                    d3.selectAll("#text_" + d["store_name"])
-                     .text((d,index) => {return (d[params['rate']]*100).toFixed(2)  + "%"})
+                     .text((d,index) => {return (d[params['rate']]*100).toFixed(1)  + "%"})
                      .moveToFront()
                      .attr('opacity', 0.8)
                      .style('font-size', 12)
@@ -256,7 +256,7 @@ for (i = 0; i < storeName.length; i++) {
                       .clone()
                       .attr("class", "stay_text")
                       .attr("id", "stay_text_" + d['store_name'] + "_" + params['rate'])
-                      .text((d,index) => {return (d[params['rate']]*100).toFixed(2) + "%"})
+                      .text((d,index) => {return (d[params['rate']]*100).toFixed(1) + "%"})
                       .attr("opacity", 0);
 
                     d3.select('.chart-outer')
@@ -266,7 +266,7 @@ for (i = 0; i < storeName.length; i++) {
                         .attr('x', vis_width - 35)
                         .attr('y', function(){
                           arr = data.filter(a => a['store_name']===d['store_name'])
-                          return 70 + yScale(arr[arr.length-1][params['rate']])
+                          return 30 + yScale(arr[arr.length-1][params['rate']])
                       })
                         .attr("text-anchor", "left")
                         .text(params['rate'] + " of " + d['store_name'])
@@ -331,11 +331,16 @@ function redraw(data, vis_width, vis_height, params) {
                           .style('stroke-opacity', 0)
     };
 
+    let bubbleScale1 = d3.scaleLinear()
+                        .range([10,1000])
+                        .domain([_.min(data.map(function(d) { return d[params['num']];})),
+                                 _.max(data.map(function(d) { return d[params['num']];}))]);
     d3.selectAll(".groupCircle")
       .transition()
       .duration(300)
       .attr('cx', function(d) { return xScale(new Date(d['date']));})
       .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
+      .attr('r', function(d) { return Math.sqrt((bubbleScale1(parseFloat(d[params['num']])))/Math.PI);})
       .style('fill-opacity', 0.6)
 
     d3.selectAll('.groupCircle_text')
@@ -403,11 +408,17 @@ function redraw(data, vis_width, vis_height, params) {
                           .style('stroke-opacity', 0)
     };
 
+    let bubbleScale2 = d3.scaleLinear()
+                        .range([10,1000])
+                        .domain([_.min(data.map(function(d) { return d[params['num']];})),
+                                 _.max(data.map(function(d) { return d[params['num']];}))]);
+
     d3.selectAll(".groupCircle")
       .transition()
       .duration(300)
       .attr('cx', function(d) { return xScale(new Date(d['date']));})
       .attr('cy', function(d) { return yScale(parseFloat(d[params['rate']]));})
+      .attr('r', function(d) { return Math.sqrt((bubbleScale2(parseFloat(d[params['num']])))/Math.PI);})
       .style('fill-opacity', 0.6)
 
     d3.selectAll('.groupCircle_text')

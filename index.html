@@ -30,7 +30,7 @@
 
 <body>
   <!-- Titles -->
- 
+
    <div style ='height : 0px; background-color : none'></div>
     <div style="background-image: url('tracks.gif');" id='title' style='width:1366px; height : 2000px, ' class = 'hello'>
     <h1 style = 'color: white ;text-align: left; font-size : 150px'>SPATIAL</br>INTELLIGENCE</h1>
@@ -38,21 +38,31 @@
 
 <div id = 'spacer01'style ='height : 20px'></div>
 
-  <div style = 'text-align: center; width: 1500px'>
-    <h3 style = 'color :rgb(41, 41, 41); font-size : 24px'>As we know, we already have mature systems for online shopping analysis, but still, heavily rely on empiricism when it comes to offline shopping. So we focused on analyzing customers and brand features in physical shopping malls.</h3>
+  <div style = 'text-align: center; '>
+    <h2 style = 'color :rgb(41, 41, 41); text-align: center; font-size : 20px'>
+      As we know, we already have mature systems for online shopping analysis, but still, heavily rely on empiricism when it comes to offline shopping.
+    </h2>
+    <h2 style = 'color :rgb(41, 41, 41); text-align: center; font-size : 20px'>
+      So we focused on analyzing customers and brand features in physical shopping malls.
+    </h2>
+
+
  </div>
 
-<div id = 'spacer02'style ='height : 20px'></div> 
+<div id = 'spacer02'style ='height : 20px'></div>
 
 <img src="cam tag.png" alt="Mall camera tagging" class="center" >
 
-<div id = 'spacer03'style ='height : 20px'></div> 
+<div id = 'spacer03'style ='height : 20px'></div>
 
   <div>
-    <h2 style = 'color: rgb(41, 41, 41); text-align: center; font-size: 18px'>The following graph helps you understand the customer visited the shopping mall in Feb 2021.</h2>
-    <h2 style = 'color: rgb(41, 41, 41);text-align: center ; font-size: 18px'>Bubble Size represents the number of current cusomer type entering the store. Percentage = number / total entering number.   </h2>
+    <h2 style = 'color: rgb(41, 41, 41); text-align: center; font-size: 20px'>The following graph helps you understand the customer visited the shopping mall in Feb 2021.</h2>
+    <h2 style = 'color: rgb(41, 41, 41);text-align: center ; font-size: 20px'>Bubble size represents the number of current cusomer label entering the store. Percentage = number of current label / total entering number.   </h2>
     </br>
-    <h2 style = 'color: rgb(41, 41, 41); text-align: center; font-size:20px'>CLICK the bubble if you would like to keep its trend path stay on the screen for comparison. Click again to remove it. </h2>
+    <h2 style = 'color: rgb(41, 41, 41); text-align: center; font-size:20px'>
+      CLICK the bubble if you would like to keep its trend path stay on the screen for same-label comparison. Click again to remove it.
+   </h2>
+   <h2 style = 'color: rgb(41, 41, 41); text-align: center; font-size:20px'>TOGGLE the "comparison" on to enable cross-label comparison.</h2>
   </br>
   </div>
 
@@ -60,7 +70,7 @@
   <div id='toolbar'></div>
 
 
- 
+
   <div id= 'legend'>
     <svg id ='legend_type_color' width = '1500' height = '30'>
       <g class = 'legendgroup' id = 'legend_type_color' text-anchor = 'start'
@@ -93,13 +103,13 @@
               <rect width = '15' height ='15' fill ='#1C1B20'></rect>
               <text dominant-baseline = 'central' x= '35' y= '10'>consumer_electronics</text>
               </g>
-      
+
     </svg>
 </div>
 
   <div id = 'button' style='width:1500px;'>
     <button type="button" id = "clear_button" class = 'button001' onclick = "clearView();" style='position:absolute; left: 1250px; top: 920px; text-align: center'>Clear All Selection</button>
-    
+
     <!-- <button title="Hello World!">Sample Button</button> -->
 
     <label class="switch" style='position:absolute; left: 1020px; top: 920px' title="To compare the rates of different labels!" alt="To compare the rates of different labels!">
@@ -136,14 +146,24 @@
     <g transform = 'translate (600,0)'>
       <circle cx = '0' cy ='20' r = '13' fill ='#c2c8c5' stroke-color = 'darkgray'></circle>
       <text dominant-baseline = 'central' x= '25' y= '20'>1000 and more</text>
-      </g>   
-    
-    
+      </g>
+  </svg>
+</div>
+
+<div id = 'legend_bubble' width = '1500' height = '100'>
+  <svg id ='legend_bubble_size' width = '1500' height = '50'>
+    <g class = 'legendgroup' id = 'legend_bubble_size' text-anchor = 'start'
+    font-family = 'Tekton Pro' font-size = '14'
+    transform = 'translate (70,0)' >
+    <g transform = 'translate (-70,0)'>
+      <text dominant-baseline = 'central' x= '25' y= '20'>
+        Note: female_rate + male_rate = 1; teenager_rate + youth_rate + middle-aged_rate + senior_rate = 1 </text>
+    </g>
   </svg>
 </div>
 
   <!-- A div container for the main visualization -->
-  <div id='vis' style='width:1500px;' class="center">
+  <div id='vis' style='width:1500px;' class="">
     <svg class='chart-outer'><g class='chart'></g></svg>
   </div>
 
