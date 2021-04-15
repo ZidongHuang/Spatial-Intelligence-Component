@@ -30,14 +30,29 @@
 
 <body>
   <!-- Titles -->
-  <div id='title' style='width:1366px;'>
-    <h1 style = 'color: #005B96'>Spatial Intelligence</h1>
-    </br>
-    <h2 style = 'color: #005B96; font-size: 18px'>The following graph helps you understand the customer visited the shopping mall in Feb 2021.</h2>
-    <h2 style = 'color: #005B96; font-size: 18px'>Bubble Size represents the number of current cusomer type entering the store. Percentage = number / total entering number.  (Visual legends are in progress) </h2>
-    </br>
-    <h2 style = 'color: #005B96; font-size:20px'>CLICK the bubble if you would like to keep its trend path stay on the screen for comparison. Click again to remove it. </h2>
+ 
+   <div style ='height : 0px; background-color : none'></div>
+    <div style="background-image: url('tracks.gif');" id='title' style='width:1366px; height : 2000px, ' class = 'hello'>
+    <h1 style = 'color: white ;text-align: left; font-size : 150px'>SPATIAL</br>INTELLIGENCE</h1>
+    </br> </div>
 
+<div id = 'spacer01'style ='height : 20px'></div>
+
+  <div style = 'text-align: center; width: 1500px'>
+    <h3 style = 'color :rgb(41, 41, 41); font-size : 24px'>As we know, we already have mature systems for online shopping analysis, but still, heavily rely on empiricism when it comes to offline shopping. So we focused on analyzing customers and brand features in physical shopping malls.</h3>
+ </div>
+
+<div id = 'spacer02'style ='height : 20px'></div> 
+
+<img src="cam tag.png" alt="Mall camera tagging" class="center" >
+
+<div id = 'spacer03'style ='height : 20px'></div> 
+
+  <div>
+    <h2 style = 'color: rgb(41, 41, 41); text-align: center; font-size: 18px'>The following graph helps you understand the customer visited the shopping mall in Feb 2021.</h2>
+    <h2 style = 'color: rgb(41, 41, 41);text-align: center ; font-size: 18px'>Bubble Size represents the number of current cusomer type entering the store. Percentage = number / total entering number.   </h2>
+    </br>
+    <h2 style = 'color: rgb(41, 41, 41); text-align: center; font-size:20px'>CLICK the bubble if you would like to keep its trend path stay on the screen for comparison. Click again to remove it. </h2>
   </br>
   </div>
 
@@ -45,51 +60,49 @@
   <div id='toolbar'></div>
 
 
-
+ 
   <div id= 'legend'>
     <svg id ='legend_type_color' width = '1500' height = '30'>
       <g class = 'legendgroup' id = 'legend_type_color' text-anchor = 'start'
-      font-family = 'sans-serif' font-size = '15'
+      font-family = 'sans-serif' font-size = '14'
       transform = 'translate (70,0)' >
       <g transform = 'translate (-70,0)'>
         <text dominant-baseline = 'central' x= '25' y= '10'>Type:</text>
       </g>
       <g transform = 'translate (20,0)'>
-        <rect width = '15' height ='15' fill ='#FAA7B8'></rect>
+        <rect width = '15' height ='15' fill ='#FF5851'></rect>
         <text dominant-baseline = 'central' x= '35' y= '10'>fashion</text>
         </g>
       <g transform = 'translate (140,0)'>
-        <rect width = '15' height ='15' fill ='#AAB6F8'></rect>
+        <rect width = '15' height ='15' fill ='#414A6B'></rect>
         <text dominant-baseline = 'central' x= '25' y= '10'>accessories</text>
         </g>
       <g transform = 'translate (260,0)'>
-          <rect width = '15' height ='15' fill ='#2C6975'></rect>
+          <rect width = '15' height ='15' fill ='#044013'></rect>
           <text dominant-baseline = 'central' x= '45' y= '10'>food</text>
           </g>
       <g transform = 'translate (380,0)'>
-          <rect width = '15' height ='15' fill ='#94B447'></rect>
+          <rect width = '15' height ='15' fill ='#B49A85'></rect>
           <text dominant-baseline = 'central' x= '35' y= '10'>jewelry</text>
           </g>
       <g transform = 'translate (500,0)'>
-            <rect width = '15' height ='15' fill ='#F9AD6A'></rect>
+            <rect width = '15' height ='15' fill ='#F3C130'></rect>
             <text dominant-baseline = 'central' x= '25' y= '10'>kids_babies</text>
             </g>
       <g transform = 'translate (620,0)'>
-              <rect width = '15' height ='15' fill ='#F9E07F'></rect>
-              <text dominant-baseline = 'central' x= '35' y= '10'>facilities</text>
+              <rect width = '15' height ='15' fill ='#1C1B20'></rect>
+              <text dominant-baseline = 'central' x= '35' y= '10'>consumer_electronics</text>
               </g>
-      <g transform = 'translate (740,0)'>
-              <rect width = '15' height ='15' fill ='#CDE0C9'></rect>
-              <text dominant-baseline = 'central' x= '25' y= '10'>consumer_electronics</text>
-              </g>
-       </g>
+      
     </svg>
 </div>
 
   <div id = 'button' style='width:1500px;'>
-    <button type="button" id = "clear_button" onclick = "clearView();" style='position:absolute; left: 1300px; top: 260px'>Clear All Selection</button>
+    <button type="button" id = "clear_button" class = 'button001' onclick = "clearView();" style='position:absolute; left: 1250px; top: 920px; text-align: center'>Clear All Selection</button>
+    
+    <!-- <button title="Hello World!">Sample Button</button> -->
 
-    <label class="switch" style='position:absolute; left: 1070px; top: 255px'>
+    <label class="switch" style='position:absolute; left: 1020px; top: 920px' title="To compare the rates of different labels!" alt="To compare the rates of different labels!">
      <input type="checkbox" id="togBtn">
      <div class="slider round" onclick = "toggle()">
       <!--ADDED HTML -->
@@ -100,17 +113,48 @@
     </label>
   </div>
 
-
+<div id = 'legend_bubble' width = '1500' height = '100'>
+  <svg id ='legend_bubble_size' width = '1500' height = '50'>
+    <g class = 'legendgroup' id = 'legend_bubble_size' text-anchor = 'start'
+    font-family = 'Tekton Pro' font-size = '14'
+    transform = 'translate (70,0)' >
+    <g transform = 'translate (-70,0)'>
+      <text dominant-baseline = 'central' x= '25' y= '20'>Customer Volume count:</text>
+    </g>
+    <g transform = 'translate (150,0)'>
+      <circle cx = '0' cy ='20' r = '3' fill ='#c2c8c5' stroke-color = 'darkgray'></circle>
+      <text dominant-baseline = 'central' x= '40' y= '20'>below 100</text>
+      </g>
+    <g transform = 'translate (300,0)'>
+      <circle cx = '0' cy ='20' r = '6' fill ='#c2c8c5' stroke-color = 'darkgray'></circle>
+      <text dominant-baseline = 'central' x= '25' y= '20'>100 to 500</text>
+      </g>
+    <g transform = 'translate (450,0)'>
+      <circle cx = '0' cy ='20' r = '10' fill ='#c2c8c5' stroke-color = 'darkgray'></circle>
+        <text dominant-baseline = 'central' x= '25' y= '20'>500 to 1000</text>
+        </g>
+    <g transform = 'translate (600,0)'>
+      <circle cx = '0' cy ='20' r = '13' fill ='#c2c8c5' stroke-color = 'darkgray'></circle>
+      <text dominant-baseline = 'central' x= '25' y= '20'>1000 and more</text>
+      </g>   
+    
+    
+  </svg>
+</div>
 
   <!-- A div container for the main visualization -->
-  <div id='vis' style='width:100%;'>
+  <div id='vis' style='width:1500px;' class="center">
     <svg class='chart-outer'><g class='chart'></g></svg>
   </div>
 
-  <div id='legend' style='width:1366px;'> </div>
+  <div style = 'text-align: center; width: 1500px'>
+    <h4 style = 'color :rgb(41, 41, 41); font-size : 10px'>*The dataset is collected by PlaceInt from Hopson.</h4>
+ </div>
 
   <script type="text/javascript" src="viz.js"></script>
+
 </body>
+
 
 
 </html>
