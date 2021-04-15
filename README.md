@@ -1,6 +1,6 @@
 # spatial_intelligence
 
-## FOR BETTER EXPERIENCE PLEASE USE THE CHROME BROWSER
+### FOR BETTER EXPERIENCE PLEASE USE THE CHROME BROWSER
 
 This is the Project Spatial Intelligence and we are Fei, Zidong, and Zihui!
 
