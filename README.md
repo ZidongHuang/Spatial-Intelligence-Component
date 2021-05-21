@@ -2,8 +2,6 @@
 
 ### FOR A BETTER EXPERIENCE PLEASE USE THE CHROME BROWSER
 
-This is the Project Spatial Intelligence and we are Fei, Zidong, and Zihui!
-
 Credit: Built on the framework of https://github.com/civisanalytics/d3_tutorial
 
 ## Overview
